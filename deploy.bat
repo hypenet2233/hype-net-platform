@@ -1,8 +1,27 @@
 @echo off
-echo Starting Automatic Deployment...
+echo ===========================================
+echo جارٍ تجهيز المنصة للنشر التلقائي...
+echo ===========================================
+
+:: 1. إضافة التغييرات
 git add .
-git commit -m "Auto-update from local machine"
+
+:: 2. محاولة الالتزام (Commit) - مع تجاوز خطأ "لا توجد تغييرات"
+git commit -m "Auto-update: Platform Improvement"
+if %errorlevel% neq 0 (
+    echo [تنبيه] لا توجد تغييرات جديدة لرفعها.
+)
+
+:: 3. الرفع إلى GitHub
+echo جارٍ الرفع إلى السيرفر...
 git push origin main
-echo.
-echo Deployment Complete! 🚀
+
+if %errorlevel% equ 0 (
+    echo ===========================================
+    echo [نجاح] تم تحديث المنصة بنجاح! 🚀
+    echo ===========================================
+) else (
+    echo [خطأ] فشل الرفع. تأكد من اتصالك بالإنترنت وصلاحيات الدخول.
+)
+
 pause
