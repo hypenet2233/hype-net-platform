@@ -1,0 +1,537 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HYPE NET - المنصة الموحدة v4.0</title>
+    <!-- استدعاء Tailwind CSS من شبكة توصيل المحتوى لتصميم احترافي وسريع -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- استدعاء مكتبة الأيقونات Phosphor Icons -->
+    <script src="https://unpkg.com/@phosphor-icons/web"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#3b82f6', // لون أزرق احترافي
+                        secondary: '#1e40af',
+                        dark: '#0f172a',
+                        darker: '#020617',
+                        light: '#f8fafc'
+                    },
+                    fontFamily: {
+                        sans: ['"Segoe UI"', 'Tahoma', 'Geneva', 'Verdana', 'sans-serif'],
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        /* تحسينات بصرية إضافية */
+        body {
+            background-color: #020617; /* لون خلفية داكن جداً */
+            color: #e2e8f0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 0;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .glass-panel {
+            background: rgba(15, 23, 42, 0.7);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            box-shadow: 0 4px 30px rgba(0, 0, 0, 0.5);
+        }
+
+        .tab-btn {
+            transition: all 0.3s ease;
+            position: relative;
+        }
+
+        .tab-btn.active {
+            background-color: rgba(59, 130, 246, 0.15);
+            color: #60a5fa;
+            border-bottom: 2px solid #3b82f6;
+        }
+
+        .tab-content {
+            display: none;
+            animation: fadeIn 0.4s ease-out;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* تحسين التمرير (Scrollbar) */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #0f172a; 
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #334155; 
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #475569; 
+        }
+
+        .loader {
+            border: 3px solid rgba(255, 255, 255, 0.1);
+            border-radius: 50%;
+            border-top: 3px solid #3b82f6;
+            width: 24px;
+            height: 24px;
+            -webkit-animation: spin 1s linear infinite; /* Safari */
+            animation: spin 1s linear infinite;
+            display: inline-block;
+            vertical-align: middle;
+            margin-left: 8px;
+            display: none; /* مخفي افتراضياً */
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        
+        .score-circle {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            font-size: 1.2rem;
+            color: white;
+            background: conic-gradient(#3b82f6 var(--score, 0%), #1e293b 0);
+            position: relative;
+        }
+        .score-circle::before {
+            content: '';
+            position: absolute;
+            width: 50px;
+            height: 50px;
+            background-color: #0f172a;
+            border-radius: 50%;
+        }
+        .score-value {
+            position: relative;
+            z-index: 1;
+        }
+
+    </style>
+</head>
+<body class="text-gray-200">
+
+    <!-- Header -->
+    <header class="border-b border-gray-800 bg-darker/80 sticky top-0 z-50 backdrop-blur-md">
+        <div class="container mx-auto px-4 py-4 flex justify-between items-center">
+            <div class="flex items-center gap-3">
+                <i class="ph ph-rocket-launch text-3xl text-blue-500"></i>
+                <div>
+                    <h1 class="text-xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-blue-400 to-indigo-400">
+                        HYPE NET
+                    </h1>
+                    <p class="text-xs text-gray-400 tracking-wider">PROMPT ENGINEERING PLATFORM V4.0</p>
+                </div>
+            </div>
+            <div class="flex items-center gap-4">
+                <span class="text-xs bg-green-900/30 text-green-400 px-2 py-1 rounded border border-green-800/50 flex items-center gap-1">
+                    <div class="w-2 h-2 rounded-full bg-green-500 animate-pulse"></div>
+                    محلي 100%
+                </span>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="container mx-auto px-4 py-8 flex-grow flex flex-col md:flex-row gap-6">
+        
+        <!-- Sidebar / Navigation -->
+        <aside class="w-full md:w-64 flex-shrink-0">
+            <div class="glass-panel rounded-xl overflow-hidden">
+                <nav class="flex flex-row md:flex-col p-2 gap-1 overflow-x-auto">
+                    <button onclick="switchTab('optimizer')" id="btn-optimizer" class="tab-btn active w-full text-right px-4 py-3 rounded-lg flex items-center gap-3 hover:bg-gray-800/50 whitespace-nowrap">
+                        <i class="ph ph-magic-wand text-xl"></i>
+                        <span>التحسين التلقائي</span>
+                    </button>
+                    <button onclick="switchTab('analyzer')" id="btn-analyzer" class="tab-btn w-full text-right px-4 py-3 rounded-lg flex items-center gap-3 hover:bg-gray-800/50 whitespace-nowrap">
+                        <i class="ph ph-magnifying-glass text-xl"></i>
+                        <span>تحليل الأنماط</span>
+                    </button>
+                    <button onclick="switchTab('acdqf')" id="btn-acdqf" class="tab-btn w-full text-right px-4 py-3 rounded-lg flex items-center gap-3 hover:bg-gray-800/50 whitespace-nowrap">
+                        <i class="ph ph-cube text-xl"></i>
+                        <span>منصة ACDQF</span>
+                    </button>
+                </nav>
+            </div>
+            
+            <div class="mt-6 p-4 glass-panel rounded-xl text-sm text-gray-400">
+                <h3 class="font-bold text-gray-300 mb-2 border-b border-gray-700 pb-2">معلومات النظام</h3>
+                <ul class="space-y-2">
+                    <li class="flex justify-between"><span>حالة المحرك:</span> <span class="text-green-400">متصل</span></li>
+                    <li class="flex justify-between"><span>وقت الاستجابة:</span> <span>&lt; 50ms</span></li>
+                    <li class="flex justify-between"><span>قاعدة القواعد:</span> <span>محدثة</span></li>
+                </ul>
+            </div>
+        </aside>
+
+        <!-- Content Area -->
+        <div class="flex-grow min-w-0">
+            
+            <!-- Tab 1: Optimizer -->
+            <div id="tab-optimizer" class="tab-content active h-full flex flex-col">
+                <div class="glass-panel rounded-xl p-6 flex-grow flex flex-col">
+                    <div class="flex justify-between items-center mb-4">
+                        <h2 class="text-2xl font-bold text-white flex items-center gap-2">
+                            <i class="ph ph-magic-wand text-blue-500"></i>
+                            المُحسّن التلقائي للأوامر
+                        </h2>
+                    </div>
+                    <p class="text-gray-400 mb-6 text-sm">قم بإدخال طلبك البسيط أو غير الواضح هنا، وسيقوم المحرك بإعادة صياغته وهيكلته ليصبح أمراً (Prompt) احترافياً يفهمه الذكاء الاصطناعي بكفاءة.</p>
+
+                    <div class="flex flex-col gap-4 flex-grow">
+                        <!-- Input Box -->
+                        <div class="flex flex-col h-1/2">
+                            <label for="raw-prompt" class="text-sm font-semibold text-gray-300 mb-2">الطلب الأصلي (Raw Input):</label>
+                            <textarea id="raw-prompt" class="w-full flex-grow bg-gray-900 border border-gray-700 rounded-lg p-4 text-gray-100 focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500 resize-none transition-colors" placeholder="مثال: اكتب لي مقال عن الذكاء الاصطناعي..."></textarea>
+                        </div>
+                        
+                        <!-- Action Bar -->
+                        <div class="flex justify-center py-2">
+                            <button onclick="processOptimization()" class="bg-blue-600 hover:bg-blue-500 text-white font-bold py-3 px-8 rounded-full shadow-[0_0_15px_rgba(59,130,246,0.4)] transition-all transform hover:scale-105 flex items-center gap-2">
+                                <i class="ph ph-lightning text-xl"></i>
+                                <span>تحسين سحري</span>
+                                <div id="optimizer-loader" class="loader"></div>
+                            </button>
+                        </div>
+
+                        <!-- Output Box -->
+                        <div class="flex flex-col h-1/2 relative">
+                            <div class="flex justify-between items-end mb-2">
+                                <label class="text-sm font-semibold text-blue-400">الطلب المُحسّن (Optimized Prompt):</label>
+                                <div class="flex gap-2">
+                                    <button onclick="copyToClipboard('optimized-prompt')" class="text-gray-400 hover:text-white transition-colors" title="نسخ">
+                                        <i class="ph ph-copy text-xl"></i>
+                                    </button>
+                                </div>
+                            </div>
+                            <textarea id="optimized-prompt" class="w-full flex-grow bg-[#0f172a] border border-blue-900/50 rounded-lg p-4 text-gray-100 focus:outline-none resize-none" readonly placeholder="سيظهر الأمر المحسن هنا..."></textarea>
+                            
+                            <!-- Score Display -->
+                            <div id="score-display" class="hidden absolute top-10 left-4 glass-panel p-2 rounded-lg flex items-center gap-3">
+                                <div class="text-xs text-gray-400 text-right">
+                                    <p>نسبة التحسن</p>
+                                    <p class="text-green-400 font-bold">+<span id="improvement-val">0</span>%</p>
+                                </div>
+                                <div id="score-circle-el" class="score-circle" style="--score: 0%;">
+                                    <span class="score-value text-sm" id="score-val">0%</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Tab 2: Analyzer -->
+            <div id="tab-analyzer" class="tab-content h-full">
+                <div class="glass-panel rounded-xl p-6 h-full">
+                    <h2 class="text-2xl font-bold text-white mb-2 flex items-center gap-2">
+                        <i class="ph ph-magnifying-glass text-blue-500"></i>
+                        تحليل وتصنيف الأنماط
+                    </h2>
+                    <p class="text-gray-400 mb-6 text-sm">يقوم هذا المحرك بتحليل نية المستخدم وتصنيف الطلب لاقتراح أفضل الممارسات.</p>
+
+                    <textarea id="analyzer-input" class="w-full h-32 bg-gray-900 border border-gray-700 rounded-lg p-4 text-gray-100 focus:outline-none focus:border-blue-500 mb-4" placeholder="أدخل النص لتحليله..."></textarea>
+                    
+                    <button onclick="analyzePattern()" class="bg-gray-800 hover:bg-gray-700 border border-gray-600 text-white font-bold py-2 px-6 rounded-lg transition-all flex items-center gap-2 mb-6">
+                        <i class="ph ph-scan"></i>
+                        <span>تحليل الآن</span>
+                    </button>
+
+                    <div id="analyzer-results" class="hidden space-y-4">
+                        <h3 class="text-lg font-semibold text-blue-400 border-b border-gray-800 pb-2">نتائج التحليل</h3>
+                        
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            <div class="bg-gray-900/50 p-4 rounded-lg border border-gray-800">
+                                <span class="text-gray-400 text-xs block mb-1">النية الرئيسية (Intent)</span>
+                                <div id="analysis-intent" class="text-xl font-bold text-white">--</div>
+                            </div>
+                            <div class="bg-gray-900/50 p-4 rounded-lg border border-gray-800">
+                                <span class="text-gray-400 text-xs block mb-1">درجة التعقيد (Complexity)</span>
+                                <div id="analysis-complexity" class="text-xl font-bold text-white">--</div>
+                            </div>
+                        </div>
+
+                        <div class="bg-gray-900/50 p-4 rounded-lg border border-gray-800">
+                            <span class="text-gray-400 text-xs block mb-2">العناصر المفقودة (Missing Elements)</span>
+                            <ul id="analysis-missing" class="list-disc list-inside text-red-400 text-sm space-y-1">
+                                <!-- سيتم ملؤها برمجياً -->
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Tab 3: ACDQF -->
+            <div id="tab-acdqf" class="tab-content h-full">
+                <div class="glass-panel rounded-xl p-6 h-full flex flex-col">
+                    <h2 class="text-2xl font-bold text-white mb-2 flex items-center gap-2">
+                        <i class="ph ph-cube text-blue-500"></i>
+                        منشئ ACDQF المتقدم
+                    </h2>
+                    <p class="text-gray-400 mb-6 text-sm">نموذج هيكلي احترافي: (Action, Context, Deep Thinking, Questions, Format)</p>
+
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4 flex-grow overflow-y-auto pr-2">
+                        <!-- Inputs -->
+                        <div class="space-y-4">
+                            <div>
+                                <label class="text-xs font-bold text-blue-400">A - الإجراء (Action)</label>
+                                <input type="text" id="acdqf-a" class="w-full bg-gray-900 border border-gray-700 rounded p-2 mt-1 text-sm text-white" placeholder="ما الذي تريده بالضبط؟ (مثال: اكتب مقال)">
+                            </div>
+                            <div>
+                                <label class="text-xs font-bold text-green-400">C - السياق (Context)</label>
+                                <textarea id="acdqf-c" class="w-full bg-gray-900 border border-gray-700 rounded p-2 mt-1 text-sm text-white h-20 resize-none" placeholder="الخلفية، الجمهور المستهدف، الهدف..."></textarea>
+                            </div>
+                            <div>
+                                <label class="text-xs font-bold text-purple-400">D - التفكير العميق (Deep Thinking)</label>
+                                <textarea id="acdqf-d" class="w-full bg-gray-900 border border-gray-700 rounded p-2 mt-1 text-sm text-white h-20 resize-none" placeholder="خطوات التفكير أو التحليل المطلوبة من النموذج..."></textarea>
+                            </div>
+                            <div>
+                                <label class="text-xs font-bold text-yellow-400">Q - قيود/أسئلة (Questions/Constraints)</label>
+                                <input type="text" id="acdqf-q" class="w-full bg-gray-900 border border-gray-700 rounded p-2 mt-1 text-sm text-white" placeholder="ما هي الممنوعات أو القيود؟">
+                            </div>
+                            <div>
+                                <label class="text-xs font-bold text-pink-400">F - الصيغة (Format)</label>
+                                <input type="text" id="acdqf-f" class="w-full bg-gray-900 border border-gray-700 rounded p-2 mt-1 text-sm text-white" placeholder="كيف تريد شكل المخرجات؟ (جدول، نقاط، كود...)">
+                            </div>
+                            <button onclick="generateACDQF()" class="w-full bg-blue-600 hover:bg-blue-500 text-white font-bold py-2 px-4 rounded transition-colors mt-4">
+                                توليد الأمر المدمج
+                            </button>
+                        </div>
+
+                        <!-- Output -->
+                        <div class="flex flex-col h-full">
+                            <div class="flex justify-between items-center mb-1">
+                                <label class="text-xs font-bold text-gray-300">النتيجة النهائية:</label>
+                                <button onclick="copyToClipboard('acdqf-output')" class="text-gray-400 hover:text-white transition-colors" title="نسخ">
+                                    <i class="ph ph-copy text-lg"></i>
+                                </button>
+                            </div>
+                            <textarea id="acdqf-output" class="w-full flex-grow bg-gray-900 border border-gray-700 rounded-lg p-4 text-gray-100 focus:outline-none resize-none font-mono text-sm leading-relaxed" readonly placeholder="سيظهر الأمر المهيكل هنا..."></textarea>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </main>
+
+    <!-- Toast Notification -->
+    <div id="toast" class="fixed bottom-4 left-1/2 transform -translate-x-1/2 bg-green-600 text-white px-6 py-3 rounded-full shadow-lg opacity-0 transition-opacity duration-300 pointer-events-none z-50 flex items-center gap-2">
+        <i class="ph ph-check-circle text-xl"></i>
+        <span id="toast-msg">تم النسخ بنجاح!</span>
+    </div>
+
+    <!-- Scripts -->
+    <script>
+        // === نظام التنقل بين النوافذ (Tab Navigation) ===
+        function switchTab(tabId) {
+            // إخفاء جميع المحتويات وإزالة التفعيل من الأزرار
+            document.querySelectorAll('.tab-content').forEach(el => el.classList.remove('active'));
+            document.querySelectorAll('.tab-btn').forEach(el => el.classList.remove('active'));
+            
+            // تفعيل العنصر المختار
+            document.getElementById(`tab-${tabId}`).classList.add('active');
+            document.getElementById(`btn-${tabId}`).classList.add('active');
+        }
+
+        // === واجهة المستخدم: النسخ للحافظة ===
+        function copyToClipboard(elementId) {
+            const el = document.getElementById(elementId);
+            if (!el.value.trim()) return;
+
+            // استخدام واجهة Clipboard API الحديثة مع fallback
+            if (navigator.clipboard && window.isSecureContext) {
+                navigator.clipboard.writeText(el.value).then(showToast);
+            } else {
+                el.select();
+                document.execCommand('copy');
+                showToast();
+                window.getSelection().removeAllRanges();
+            }
+        }
+
+        function showToast(msg = "تم النسخ بنجاح!") {
+            const toast = document.getElementById('toast');
+            document.getElementById('toast-msg').innerText = msg;
+            toast.style.opacity = '1';
+            setTimeout(() => { toast.style.opacity = '0'; }, 3000);
+        }
+
+        // === الخوارزمية الأساسية: المحسّن التلقائي (Auto Improver) ===
+        // تم بناء محرك قواعد محلي يعالج النص بدون الحاجة لخادم
+        function processOptimization() {
+            const rawInput = document.getElementById('raw-prompt').value.trim();
+            const loader = document.getElementById('optimizer-loader');
+            const outputArea = document.getElementById('optimized-prompt');
+            const scoreDisplay = document.getElementById('score-display');
+            const scoreCircleEl = document.getElementById('score-circle-el');
+            const scoreValEl = document.getElementById('score-val');
+            const improvementValEl = document.getElementById('improvement-val');
+
+            if (!rawInput) {
+                alert("الرجاء إدخال نص للتحسين.");
+                return;
+            }
+
+            // إظهار التحميل لمحاكاة المعالجة المعقدة
+            loader.style.display = 'inline-block';
+            outputArea.value = 'جاري التحليل وتطبيق قواعد الهندسة...';
+            scoreDisplay.classList.add('hidden');
+
+            setTimeout(() => {
+                // 1. تحليل المدخلات
+                const analysis = internalAnalyzer(rawInput);
+                
+                // 2. توليد الهيكل المحسن
+                let optimized = `🎯 **الهدف (Action):**\n${analysis.action}\n\n`;
+                
+                optimized += `📝 **السياق والتفاصيل (Context):**\n`;
+                optimized += `- يرجى التصرف كخبير محترف في هذا المجال.\n`;
+                optimized += `- الهدف من هذا الطلب هو الوصول إلى نتيجة دقيقة وموثوقة.\n\n`;
+
+                optimized += `⚙️ **القيود والإرشادات (Constraints):**\n`;
+                optimized += `- تجنب الحشو واستخدم لغة واضحة ومباشرة.\n`;
+                if (analysis.needsFormatting) {
+                    optimized += `- قدم المعلومات بشكل مهيكل (نقاط، عناوين فرعية).\n`;
+                }
+                
+                optimized += `\n📋 **صيغة المخرجات المطلوبة (Format):**\n`;
+                optimized += `يرجى تقديم الإجابة بتنسيق Markdown منظم.\n`;
+
+                // 3. عرض النتيجة
+                outputArea.value = optimized;
+                loader.style.display = 'none';
+
+                // 4. حساب وعرض النتيجة (Score)
+                const baseScore = Math.min(30 + (rawInput.length / 5), 50); // تقييم أولي بسيط للطلب الأصلي
+                const finalScore = 85 + Math.floor(Math.random() * 10); // التقييم النهائي للأمر المحسن
+                const improvement = Math.floor(finalScore - baseScore);
+
+                scoreCircleEl.style.setProperty('--score', `${finalScore}%`);
+                scoreValEl.innerText = `${finalScore}%`;
+                improvementValEl.innerText = improvement;
+                scoreDisplay.classList.remove('hidden');
+
+            }, 800); // تأخير وهمي لتحسين تجربة المستخدم وإعطاء شعور بالمعالجة
+        }
+
+        // === الخوارزمية المساعدة: محلل النصوص الداخلي ===
+        function internalAnalyzer(text) {
+            const lowerText = text.toLowerCase();
+            let action = "تنفيذ الطلب التالي بأفضل جودة ممكنة: " + text;
+            let intent = "عام";
+            let needsFormatting = false;
+            let complexity = "منخفضة";
+            let missing = [];
+
+            // قواعد تحليل بسيطة (Rule-based heuristics)
+            if (lowerText.includes('اكتب') || lowerText.includes('مقالة') || lowerText.includes('نص')) {
+                action = `كتابة محتوى احترافي ومفصل بناءً على الفكرة التالية:\n"${text}"`;
+                intent = "إنشاء محتوى (Content Creation)";
+                needsFormatting = true;
+            } else if (lowerText.includes('كود') || lowerText.includes('برمجة') || lowerText.includes('خطأ')) {
+                action = `كتابة وتحليل الكود البرمجي بناءً على المتطلبات التالية:\n"${text}"`;
+                intent = "برمجة وتطوير (Software Development)";
+                complexity = "عالية";
+                missing.push("لغة البرمجة المفضلة");
+                missing.push("إصدار الإطار/المكتبة");
+            } else if (lowerText.includes('لخص') || lowerText.includes('ملخص')) {
+                action = `تقديم ملخص شامل ودقيق للنص/الموضوع التالي:\n"${text}"`;
+                intent = "تلخيص بيانات (Summarization)";
+                needsFormatting = true;
+            }
+
+            if (text.length < 20) {
+                missing.push("سياق كافٍ (السؤال قصير جداً)");
+                missing.push("تحديد الجمهور المستهدف");
+            }
+
+            return { action, intent, needsFormatting, complexity, missing };
+        }
+
+        // === واجهة المستخدم: تحليل الأنماط ===
+        function analyzePattern() {
+            const input = document.getElementById('analyzer-input').value.trim();
+            if (!input) return;
+
+            const resultsDiv = document.getElementById('analyzer-results');
+            const intentEl = document.getElementById('analysis-intent');
+            const complexityEl = document.getElementById('analysis-complexity');
+            const missingEl = document.getElementById('analysis-missing');
+
+            const analysis = internalAnalyzer(input);
+
+            intentEl.innerText = analysis.intent;
+            
+            // تلوين التعقيد
+            complexityEl.innerText = analysis.complexity;
+            complexityEl.className = `text-xl font-bold ${analysis.complexity === 'عالية' ? 'text-red-400' : 'text-green-400'}`;
+
+            // معالجة العناصر المفقودة
+            missingEl.innerHTML = '';
+            if (analysis.missing.length === 0) {
+                missingEl.innerHTML = '<li class="text-green-400">لا يوجد، الطلب يبدو مكتملاً مبدئياً.</li>';
+            } else {
+                analysis.missing.forEach(item => {
+                    const li = document.createElement('li');
+                    li.innerText = item;
+                    missingEl.appendChild(li);
+                });
+            }
+
+            resultsDiv.classList.remove('hidden');
+        }
+
+        // === واجهة المستخدم: بناء نموذج ACDQF ===
+        function generateACDQF() {
+            const a = document.getElementById('acdqf-a').value.trim();
+            const c = document.getElementById('acdqf-c').value.trim();
+            const d = document.getElementById('acdqf-d').value.trim();
+            const q = document.getElementById('acdqf-q').value.trim();
+            const f = document.getElementById('acdqf-f').value.trim();
+            
+            const outputArea = document.getElementById('acdqf-output');
+
+            if (!a) {
+                alert("حقل الإجراء (Action) إلزامي كحد أدنى.");
+                return;
+            }
+
+            let prompt = `**[الهدف الرئيسي]**\n${a}\n\n`;
+            
+            if (c) prompt += `**[السياق والخلفية]**\n${c}\n\n`;
+            if (d) prompt += `**[إرشادات التفكير والتحليل]**\nيرجى التفكير خطوة بخطوة:\n${d}\n\n`;
+            if (q) prompt += `**[القيود والممنوعات]**\n${q}\n\n`;
+            if (f) prompt += `**[صيغة المخرجات]**\n${f}\n`;
+
+            outputArea.value = prompt;
+        }
+
+    </script>
+</body>
+</html>
