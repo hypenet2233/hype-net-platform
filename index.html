@@ -33,7 +33,8 @@
         }
 
         body {
-            background: linear-gradient(135deg, #020617 0%, #0f172a 50%, #020617 100%);
+            background: linear-gradient(135deg, #0a0e27 0%, #1a0e3a 25%, #0f1729 50%, #1a0e3a 75%, #0a0e27 100%);
+            background-attachment: fixed;
             color: #e2e8f0;
             font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
             margin: 0;
@@ -52,8 +53,10 @@
             left: 0;
             right: 0;
             bottom: 0;
-            background: radial-gradient(circle at 20% 50%, rgba(59, 130, 246, 0.05) 0%, transparent 50%),
-                        radial-gradient(circle at 80% 80%, rgba(139, 92, 246, 0.05) 0%, transparent 50%);
+            background:
+                radial-gradient(circle at 10% 20%, rgba(59, 130, 246, 0.08) 0%, transparent 50%),
+                radial-gradient(circle at 90% 30%, rgba(139, 92, 246, 0.08) 0%, transparent 50%),
+                radial-gradient(circle at 50% 90%, rgba(34, 197, 94, 0.05) 0%, transparent 50%);
             pointer-events: none;
             z-index: -1;
         }
@@ -72,6 +75,14 @@
             border-color: rgba(59, 130, 246, 0.4);
             box-shadow: 0 8px 32px rgba(59, 130, 246, 0.15),
                         inset 0 1px 1px rgba(255, 255, 255, 0.1);
+        }
+
+        main {
+            min-height: calc(100vh - 120px);
+        }
+
+        .container {
+            max-width: 1400px;
         }
 
         .tab-btn {
@@ -245,26 +256,77 @@
             transform: translateY(0);
         }
 
+        .copy-btn {
+            background: rgba(59, 130, 246, 0.1);
+            border: 1px solid rgba(59, 130, 246, 0.3);
+            color: #60a5fa;
+            padding: 8px;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .copy-btn:hover {
+            background: rgba(59, 130, 246, 0.2);
+            border-color: rgba(59, 130, 246, 0.6);
+            box-shadow: 0 4px 12px rgba(59, 130, 246, 0.2);
+            transform: scale(1.1);
+        }
+
+        .copy-btn:active {
+            transform: scale(0.95);
+        }
+
+        .clear-btn {
+            background: rgba(239, 68, 68, 0.1);
+            border: 1px solid rgba(239, 68, 68, 0.3);
+            color: #ef4444;
+            padding: 6px 8px;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 12px;
+        }
+
+        .clear-btn:hover {
+            background: rgba(239, 68, 68, 0.2);
+            border-color: rgba(239, 68, 68, 0.6);
+            box-shadow: 0 4px 12px rgba(239, 68, 68, 0.2);
+            transform: scale(1.05);
+        }
+
+        .clear-btn:active {
+            transform: scale(0.95);
+        }
+
     </style>
 </head>
 <body class="text-gray-200">
 
     <!-- Header -->
-    <header class="border-b border-gray-800 bg-darker/80 sticky top-0 z-50 backdrop-blur-md">
-        <div class="container mx-auto px-4 py-4 flex justify-between items-center">
+    <header class="border-b border-gray-700/30 bg-gradient-to-r from-dark/90 via-darker to-dark/90 sticky top-0 z-50 backdrop-blur-xl">
+        <div class="container mx-auto px-4 py-3 flex justify-between items-center">
             <div class="flex items-center gap-3">
-                <i class="ph ph-rocket-launch text-3xl text-blue-500"></i>
+                <div class="p-2 bg-gradient-to-br from-blue-500/20 to-purple-500/20 rounded-lg">
+                    <i class="ph ph-rocket-launch text-2xl text-blue-400"></i>
+                </div>
                 <div>
-                    <h1 class="text-xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-blue-400 to-indigo-400">
+                    <h1 class="text-lg font-bold bg-clip-text text-transparent bg-gradient-to-r from-blue-400 via-cyan-400 to-purple-400">
                         HYPE NET
                     </h1>
-                    <p class="text-xs text-gray-400 tracking-wider">PROMPT ENGINEERING PLATFORM V4.0</p>
+                    <p class="text-xs text-gray-500 tracking-wider">AI PROMPT ENGINEERING</p>
                 </div>
             </div>
             <div class="flex items-center gap-4">
-                <span class="text-xs bg-green-900/30 text-green-400 px-2 py-1 rounded border border-green-800/50 flex items-center gap-1">
-                    <div class="w-2 h-2 rounded-full bg-green-500 animate-pulse"></div>
-                    محلي 100%
+                <span class="text-xs bg-gradient-to-r from-green-900/50 to-green-800/30 text-green-300 px-3 py-1 rounded-full border border-green-700/50 flex items-center gap-2">
+                    <div class="w-2 h-2 rounded-full bg-green-400 animate-pulse"></div>
+                    <span>متصل</span>
                 </span>
             </div>
         </div>
@@ -277,27 +339,39 @@
         <aside class="w-full md:w-64 flex-shrink-0">
             <div class="glass-panel rounded-xl overflow-hidden">
                 <nav class="flex flex-row md:flex-col p-2 gap-1 overflow-x-auto">
-                    <button onclick="switchTab('optimizer')" id="btn-optimizer" class="tab-btn active w-full text-right px-4 py-3 rounded-lg flex items-center gap-3 hover:bg-gray-800/50 whitespace-nowrap">
+                    <button onclick="switchTab('optimizer')" id="btn-optimizer" class="tab-btn active w-full text-right px-4 py-3 rounded-lg flex items-center gap-3 whitespace-nowrap">
                         <i class="ph ph-magic-wand text-xl"></i>
-                        <span>التحسين التلقائي</span>
+                        <span>التحسين السحري</span>
                     </button>
-                    <button onclick="switchTab('analyzer')" id="btn-analyzer" class="tab-btn w-full text-right px-4 py-3 rounded-lg flex items-center gap-3 hover:bg-gray-800/50 whitespace-nowrap">
+                    <button onclick="switchTab('analyzer')" id="btn-analyzer" class="tab-btn w-full text-right px-4 py-3 rounded-lg flex items-center gap-3 whitespace-nowrap">
                         <i class="ph ph-magnifying-glass text-xl"></i>
-                        <span>تحليل الأنماط</span>
+                        <span>تحليل ذكي</span>
                     </button>
-                    <button onclick="switchTab('acdqf')" id="btn-acdqf" class="tab-btn w-full text-right px-4 py-3 rounded-lg flex items-center gap-3 hover:bg-gray-800/50 whitespace-nowrap">
+                    <button onclick="switchTab('acdqf')" id="btn-acdqf" class="tab-btn w-full text-right px-4 py-3 rounded-lg flex items-center gap-3 whitespace-nowrap">
                         <i class="ph ph-cube text-xl"></i>
-                        <span>منصة ACDQF</span>
+                        <span>نموذج ACDQF</span>
                     </button>
                 </nav>
             </div>
             
-            <div class="mt-6 p-4 glass-panel rounded-xl text-sm text-gray-400">
-                <h3 class="font-bold text-gray-300 mb-2 border-b border-gray-700 pb-2">معلومات النظام</h3>
-                <ul class="space-y-2">
-                    <li class="flex justify-between"><span>حالة المحرك:</span> <span class="text-green-400">متصل</span></li>
-                    <li class="flex justify-between"><span>وقت الاستجابة:</span> <span>&lt; 50ms</span></li>
-                    <li class="flex justify-between"><span>قاعدة القواعد:</span> <span>محدثة</span></li>
+            <div class="mt-6 p-4 glass-panel rounded-xl text-sm">
+                <h3 class="font-bold bg-clip-text text-transparent bg-gradient-to-r from-cyan-400 to-blue-400 mb-3 border-b border-gray-700/50 pb-2">⚡ النظام</h3>
+                <ul class="space-y-2 text-gray-400">
+                    <li class="flex justify-between">
+                        <span>الحالة:</span>
+                        <span class="flex items-center gap-1">
+                            <div class="w-2 h-2 bg-green-400 rounded-full animate-pulse"></div>
+                            <span class="text-green-400">متصل</span>
+                        </span>
+                    </li>
+                    <li class="flex justify-between">
+                        <span>السرعة:</span>
+                        <span class="text-cyan-400">&lt; 50ms</span>
+                    </li>
+                    <li class="flex justify-between">
+                        <span>الإصدار:</span>
+                        <span class="text-purple-400">v4.0</span>
+                    </li>
                 </ul>
             </div>
         </aside>
@@ -318,9 +392,14 @@
 
                     <div class="flex flex-col gap-4 flex-grow">
                         <!-- Input Box -->
-                        <div class="flex flex-col h-1/2">
-                            <label for="raw-prompt" class="text-sm font-semibold text-gray-300 mb-2">الطلب الأصلي (Raw Input):</label>
-                            <textarea id="raw-prompt" class="w-full flex-grow bg-gray-900 border border-gray-700 rounded-lg p-4 text-gray-100 focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500 resize-none transition-colors" placeholder="مثال: اكتب لي مقال عن الذكاء الاصطناعي..."></textarea>
+                        <div class="flex flex-col h-1/3">
+                            <div class="flex justify-between items-center mb-2">
+                                <label for="raw-prompt" class="text-sm font-semibold bg-clip-text text-transparent bg-gradient-to-r from-purple-400 to-pink-400">📝 الطلب الأصلي (Raw Input)</label>
+                                <button onclick="document.getElementById('raw-prompt').value = ''; storage.clear('raw-prompt'); showToast('تم مسح الخانة')" class="clear-btn" title="مسح الخانة">
+                                    <i class="ph ph-trash text-sm"></i>
+                                </button>
+                            </div>
+                            <textarea id="raw-prompt" class="w-full flex-grow bg-gray-900/50 border border-purple-500/30 rounded-lg p-3 text-gray-100 focus:outline-none focus:border-purple-500 focus:ring-2 focus:ring-purple-500/50 resize-none transition-all" placeholder="مثال: اكتب لي مقال عن الذكاء الاصطناعي..."></textarea>
                         </div>
                         
                         <!-- Action Bar -->
@@ -332,17 +411,20 @@
                             </button>
                         </div>
 
-                        <!-- Output Box -->
-                        <div class="flex flex-col h-1/2 relative">
+                        <!-- Output Box - توسيع -->
+                        <div class="flex flex-col h-2/3 relative">
                             <div class="flex justify-between items-end mb-2">
-                                <label class="text-sm font-semibold text-blue-400">الطلب المُحسّن (Optimized Prompt):</label>
+                                <label class="text-sm font-semibold bg-clip-text text-transparent bg-gradient-to-r from-blue-400 to-cyan-400">✨ الطلب المُحسّن (Optimized Prompt)</label>
                                 <div class="flex gap-2">
-                                    <button onclick="copyToClipboard('optimized-prompt')" class="text-gray-400 hover:text-white transition-colors" title="نسخ">
-                                        <i class="ph ph-copy text-xl"></i>
+                                    <button onclick="document.getElementById('optimized-prompt').value = ''; storage.clear('optimized-prompt'); document.getElementById('score-display').classList.add('hidden'); showToast('تم مسح النتيجة')" class="clear-btn" title="مسح النتيجة">
+                                        <i class="ph ph-trash text-sm"></i>
+                                    </button>
+                                    <button onclick="copyToClipboard('optimized-prompt')" class="copy-btn" title="نسخ الأمر">
+                                        <i class="ph ph-copy text-lg"></i>
                                     </button>
                                 </div>
                             </div>
-                            <textarea id="optimized-prompt" class="w-full flex-grow bg-[#0f172a] border border-blue-900/50 rounded-lg p-4 text-gray-100 focus:outline-none resize-none" readonly placeholder="سيظهر الأمر المحسن هنا..."></textarea>
+                            <textarea id="optimized-prompt" class="w-full flex-grow bg-gradient-to-b from-gray-900 to-[#0f172a] border border-blue-500/30 rounded-lg p-4 text-gray-100 focus:outline-none resize-none focus:ring-2 focus:ring-blue-500/50 font-mono text-sm" readonly placeholder="سيظهر الأمر المحسن هنا بشكل مفصل..."></textarea>
                             
                             <!-- Score Display -->
                             <div id="score-display" class="hidden absolute top-10 left-4 glass-panel p-2 rounded-lg flex items-center gap-3">
@@ -366,10 +448,18 @@
                         <i class="ph ph-magnifying-glass text-blue-500"></i>
                         تحليل وتصنيف الأنماط
                     </h2>
-                    <p class="text-gray-400 mb-6 text-sm">يقوم هذا المحرك بتحليل نية المستخدم وتصنيف الطلب لاقتراح أفضل الممارسات.</p>
+                    <p class="text-gray-400 mb-4 text-sm">يقوم هذا المحرك بتحليل نية المستخدم وتصنيف الطلب لاقتراح أفضل الممارسات.</p>
 
-                    <textarea id="analyzer-input" class="w-full h-32 bg-gray-900 border border-gray-700 rounded-lg p-4 text-gray-100 focus:outline-none focus:border-blue-500 mb-4" placeholder="أدخل النص لتحليله..."></textarea>
-                    
+                    <div class="mb-4">
+                        <div class="flex justify-between items-end mb-2">
+                            <label class="text-sm text-gray-300">النص المراد تحليله:</label>
+                            <button onclick="document.getElementById('analyzer-input').value = ''; storage.clear('analyzer-input'); showToast('تم مسح النص')" class="clear-btn" title="مسح النص">
+                                <i class="ph ph-trash text-sm"></i>
+                            </button>
+                        </div>
+                        <textarea id="analyzer-input" class="w-full h-28 bg-gray-900 border border-gray-700 rounded-lg p-4 text-gray-100 focus:outline-none focus:border-blue-500 transition-all" placeholder="أدخل النص لتحليله..."></textarea>
+                    </div>
+
                     <button onclick="analyzePattern()" class="secondary-btn flex items-center gap-2 mb-6">
                         <i class="ph ph-scan"></i>
                         <span>تحليل الآن</span>
@@ -406,7 +496,21 @@
                         <i class="ph ph-cube text-blue-500"></i>
                         منشئ ACDQF المتقدم
                     </h2>
-                    <p class="text-gray-400 mb-6 text-sm">نموذج هيكلي احترافي: (Action, Context, Deep Thinking, Questions, Format)</p>
+                    <div class="flex justify-between items-center mb-4">
+                        <p class="text-gray-400 text-sm">نموذج هيكلي احترافي: (Action, Context, Deep Thinking, Questions, Format)</p>
+                        <button onclick="
+                            document.getElementById('acdqf-a').value = '';
+                            document.getElementById('acdqf-c').value = '';
+                            document.getElementById('acdqf-d').value = '';
+                            document.getElementById('acdqf-q').value = '';
+                            document.getElementById('acdqf-f').value = '';
+                            document.getElementById('acdqf-output').value = '';
+                            storage.clear('acdqf-output');
+                            showToast('تم مسح جميع الحقول');
+                        " class="clear-btn" title="مسح جميع الحقول">
+                            <i class="ph ph-trash text-sm"></i>
+                        </button>
+                    </div>
 
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-4 flex-grow overflow-y-auto pr-2">
                         <!-- Inputs -->
@@ -440,9 +544,14 @@
                         <div class="flex flex-col h-full">
                             <div class="flex justify-between items-center mb-1">
                                 <label class="text-xs font-bold text-gray-300">النتيجة النهائية:</label>
-                                <button onclick="copyToClipboard('acdqf-output')" class="text-gray-400 hover:text-white transition-colors" title="نسخ">
-                                    <i class="ph ph-copy text-lg"></i>
-                                </button>
+                                <div class="flex gap-2">
+                                    <button onclick="document.getElementById('acdqf-output').value = ''; storage.clear('acdqf-output'); showToast('تم مسح النتيجة')" class="clear-btn" title="مسح النتيجة">
+                                        <i class="ph ph-trash text-sm"></i>
+                                    </button>
+                                    <button onclick="copyToClipboard('acdqf-output')" class="copy-btn" title="نسخ الأمر">
+                                        <i class="ph ph-copy text-lg"></i>
+                                    </button>
+                                </div>
                             </div>
                             <textarea id="acdqf-output" class="w-full flex-grow bg-gray-900 border border-gray-700 rounded-lg p-4 text-gray-100 focus:outline-none resize-none font-mono text-sm leading-relaxed" readonly placeholder="سيظهر الأمر المهيكل هنا..."></textarea>
                         </div>
@@ -453,8 +562,49 @@
         </div>
     </main>
 
+    <!-- Footer -->
+    <footer class="border-t border-gray-700/30 bg-gradient-to-r from-[#0a0e27] via-[#1a0e3a]/50 to-[#0a0e27] backdrop-blur-sm mt-auto">
+        <div class="container mx-auto px-4 py-8">
+            <div class="flex flex-col md:flex-row justify-between items-center gap-6">
+                <div class="text-center md:text-right order-2 md:order-1">
+                    <div class="flex items-center gap-2 justify-center md:justify-start mb-2">
+                        <i class="ph ph-rocket-launch text-blue-400 text-xl"></i>
+                        <p class="text-sm font-semibold">
+                            <span class="bg-clip-text text-transparent bg-gradient-to-r from-blue-400 to-cyan-400">HYPE NET</span>
+                        </p>
+                    </div>
+                    <p class="text-xs text-gray-500 mb-2">منصة تحسين الأوامر الذكية المبنية بتقنية الذكاء الاصطناعي</p>
+                    <p class="text-xs text-gray-600 font-light">
+                        © 2026 جميع الحقوق محفوظة
+                        <span class="text-gray-700">•</span>
+                        صُنعت بـ <i class="ph ph-heart text-red-500/80 inline animate-pulse"></i>
+                    </p>
+                </div>
+                <div class="order-1 md:order-2">
+                    <p class="text-xs text-gray-600 mb-3 text-center">تابعنا</p>
+                    <div class="flex gap-4 justify-center">
+                        <a href="#" class="p-2 rounded-lg bg-gray-900/30 text-gray-400 hover:text-blue-400 hover:bg-blue-500/10 transition-all" title="GitHub">
+                            <i class="ph ph-github-logo text-lg"></i>
+                        </a>
+                        <a href="#" class="p-2 rounded-lg bg-gray-900/30 text-gray-400 hover:text-blue-400 hover:bg-blue-500/10 transition-all" title="Twitter">
+                            <i class="ph ph-x-logo text-lg"></i>
+                        </a>
+                        <a href="#" class="p-2 rounded-lg bg-gray-900/30 text-gray-400 hover:text-blue-400 hover:bg-blue-500/10 transition-all" title="Email">
+                            <i class="ph ph-envelope text-lg"></i>
+                        </a>
+                    </div>
+                </div>
+            </div>
+            <div class="border-t border-gray-700/20 mt-6 pt-4">
+                <p class="text-xs text-gray-600 text-center">
+                    تم بناء هذا التطبيق كتجربة تعليمية | جميع البيانات محفوظة محلياً في جهازك
+                </p>
+            </div>
+        </div>
+    </footer>
+
     <!-- Toast Notification -->
-    <div id="toast" class="fixed bottom-4 left-1/2 transform -translate-x-1/2 bg-green-600 text-white px-6 py-3 rounded-full shadow-lg opacity-0 transition-opacity duration-300 pointer-events-none z-50 flex items-center gap-2">
+    <div id="toast" class="fixed bottom-20 md:bottom-4 left-1/2 transform -translate-x-1/2 bg-gradient-to-r from-green-600 to-green-500 text-white px-6 py-3 rounded-full shadow-lg opacity-0 transition-opacity duration-300 pointer-events-none z-50 flex items-center gap-2">
         <i class="ph ph-check-circle text-xl"></i>
         <span id="toast-msg">تم النسخ بنجاح!</span>
     </div>
