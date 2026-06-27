@@ -27,35 +27,83 @@
         }
     </script>
     <style>
-        /* تحسينات بصرية إضافية */
+        /* تحسينات بصرية احترافية متقدمة */
+        * {
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
         body {
-            background-color: #020617; /* لون خلفية داكن جداً */
+            background: linear-gradient(135deg, #020617 0%, #0f172a 50%, #020617 100%);
             color: #e2e8f0;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
             margin: 0;
             padding: 0;
             min-height: 100vh;
             display: flex;
             flex-direction: column;
+            position: relative;
+            overflow-x: hidden;
+        }
+
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: radial-gradient(circle at 20% 50%, rgba(59, 130, 246, 0.05) 0%, transparent 50%),
+                        radial-gradient(circle at 80% 80%, rgba(139, 92, 246, 0.05) 0%, transparent 50%);
+            pointer-events: none;
+            z-index: -1;
         }
 
         .glass-panel {
-            background: rgba(15, 23, 42, 0.7);
-            backdrop-filter: blur(12px);
-            -webkit-backdrop-filter: blur(12px);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            box-shadow: 0 4px 30px rgba(0, 0, 0, 0.5);
+            background: rgba(15, 23, 42, 0.6);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid rgba(59, 130, 246, 0.2);
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3),
+                        inset 0 1px 1px rgba(255, 255, 255, 0.1);
+            border-radius: 16px;
+        }
+
+        .glass-panel:hover {
+            border-color: rgba(59, 130, 246, 0.4);
+            box-shadow: 0 8px 32px rgba(59, 130, 246, 0.15),
+                        inset 0 1px 1px rgba(255, 255, 255, 0.1);
         }
 
         .tab-btn {
-            transition: all 0.3s ease;
             position: relative;
+            font-weight: 500;
+            border: none;
+            background: transparent;
+            cursor: pointer;
+            overflow: hidden;
+        }
+
+        .tab-btn::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(90deg, rgba(59, 130, 246, 0.1), transparent);
+            transform: scaleX(0);
+            transform-origin: right;
+            transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .tab-btn:hover::before {
+            transform: scaleX(1);
+            transform-origin: left;
         }
 
         .tab-btn.active {
-            background-color: rgba(59, 130, 246, 0.15);
+            background: linear-gradient(135deg, rgba(59, 130, 246, 0.2) 0%, rgba(59, 130, 246, 0.05) 100%);
             color: #60a5fa;
-            border-bottom: 2px solid #3b82f6;
+            border-bottom: 3px solid;
+            border-image: linear-gradient(90deg, #3b82f6, #60a5fa) 1;
+            box-shadow: 0 4px 12px rgba(59, 130, 246, 0.2);
         }
 
         .tab-content {
@@ -130,6 +178,71 @@
         .score-value {
             position: relative;
             z-index: 1;
+        }
+
+        .premium-btn {
+            position: relative;
+            background: linear-gradient(135deg, #3b82f6 0%, #2563eb 50%, #1d4ed8 100%);
+            color: white;
+            font-weight: 700;
+            padding: 12px 32px;
+            border-radius: 12px;
+            border: none;
+            cursor: pointer;
+            font-size: 16px;
+            overflow: hidden;
+            box-shadow: 0 8px 24px rgba(59, 130, 246, 0.4),
+                        inset 0 1px 1px rgba(255, 255, 255, 0.2);
+        }
+
+        .premium-btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+            transition: left 0.5s;
+        }
+
+        .premium-btn:hover::before {
+            left: 100%;
+        }
+
+        .premium-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 12px 32px rgba(59, 130, 246, 0.6),
+                        inset 0 1px 1px rgba(255, 255, 255, 0.3);
+        }
+
+        .premium-btn:active {
+            transform: translateY(0);
+            box-shadow: 0 4px 12px rgba(59, 130, 246, 0.4),
+                        inset 0 2px 4px rgba(0, 0, 0, 0.2);
+        }
+
+        .secondary-btn {
+            background: linear-gradient(135deg, rgba(59, 130, 246, 0.15) 0%, rgba(59, 130, 246, 0.05) 100%);
+            border: 1.5px solid rgba(59, 130, 246, 0.4);
+            color: #60a5fa;
+            font-weight: 600;
+            padding: 10px 24px;
+            border-radius: 10px;
+            cursor: pointer;
+            font-size: 14px;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .secondary-btn:hover {
+            background: linear-gradient(135deg, rgba(59, 130, 246, 0.25) 0%, rgba(59, 130, 246, 0.1) 100%);
+            border-color: rgba(59, 130, 246, 0.6);
+            box-shadow: 0 4px 12px rgba(59, 130, 246, 0.2);
+            transform: translateY(-1px);
+        }
+
+        .secondary-btn:active {
+            transform: translateY(0);
         }
 
     </style>
@@ -212,7 +325,7 @@
                         
                         <!-- Action Bar -->
                         <div class="flex justify-center py-2">
-                            <button onclick="processOptimization()" class="bg-blue-600 hover:bg-blue-500 text-white font-bold py-3 px-8 rounded-full shadow-[0_0_15px_rgba(59,130,246,0.4)] transition-all transform hover:scale-105 flex items-center gap-2">
+                            <button onclick="processOptimization()" class="premium-btn flex items-center gap-2">
                                 <i class="ph ph-lightning text-xl"></i>
                                 <span>تحسين سحري</span>
                                 <div id="optimizer-loader" class="loader"></div>
@@ -257,7 +370,7 @@
 
                     <textarea id="analyzer-input" class="w-full h-32 bg-gray-900 border border-gray-700 rounded-lg p-4 text-gray-100 focus:outline-none focus:border-blue-500 mb-4" placeholder="أدخل النص لتحليله..."></textarea>
                     
-                    <button onclick="analyzePattern()" class="bg-gray-800 hover:bg-gray-700 border border-gray-600 text-white font-bold py-2 px-6 rounded-lg transition-all flex items-center gap-2 mb-6">
+                    <button onclick="analyzePattern()" class="secondary-btn flex items-center gap-2 mb-6">
                         <i class="ph ph-scan"></i>
                         <span>تحليل الآن</span>
                     </button>
@@ -318,7 +431,7 @@
                                 <label class="text-xs font-bold text-pink-400">F - الصيغة (Format)</label>
                                 <input type="text" id="acdqf-f" class="w-full bg-gray-900 border border-gray-700 rounded p-2 mt-1 text-sm text-white" placeholder="كيف تريد شكل المخرجات؟ (جدول، نقاط، كود...)">
                             </div>
-                            <button onclick="generateACDQF()" class="w-full bg-blue-600 hover:bg-blue-500 text-white font-bold py-2 px-4 rounded transition-colors mt-4">
+                            <button onclick="generateACDQF()" class="w-full premium-btn mt-4">
                                 توليد الأمر المدمج
                             </button>
                         </div>
@@ -348,16 +461,48 @@
 
     <!-- Scripts -->
     <script>
+        // === نظام التخزين المحلي (LocalStorage) ===
+        const storage = {
+            save: (key, value) => localStorage.setItem(`hype-net-${key}`, JSON.stringify(value)),
+            load: (key) => {
+                try {
+                    return JSON.parse(localStorage.getItem(`hype-net-${key}`));
+                } catch {
+                    return null;
+                }
+            },
+            clear: (key) => localStorage.removeItem(`hype-net-${key}`)
+        };
+
+        window.addEventListener('beforeunload', () => {
+            const rawPrompt = document.getElementById('raw-prompt').value;
+            const analyzerInput = document.getElementById('analyzer-input').value;
+            if (rawPrompt) storage.save('raw-prompt', rawPrompt);
+            if (analyzerInput) storage.save('analyzer-input', analyzerInput);
+        });
+
+        window.addEventListener('load', () => {
+            const savedRaw = storage.load('raw-prompt');
+            const savedAnalyzer = storage.load('analyzer-input');
+            if (savedRaw) document.getElementById('raw-prompt').value = savedRaw;
+            if (savedAnalyzer) document.getElementById('analyzer-input').value = savedAnalyzer;
+        });
+
         // === نظام التنقل بين النوافذ (Tab Navigation) ===
         function switchTab(tabId) {
-            // إخفاء جميع المحتويات وإزالة التفعيل من الأزرار
             document.querySelectorAll('.tab-content').forEach(el => el.classList.remove('active'));
             document.querySelectorAll('.tab-btn').forEach(el => el.classList.remove('active'));
-            
-            // تفعيل العنصر المختار
+
             document.getElementById(`tab-${tabId}`).classList.add('active');
             document.getElementById(`btn-${tabId}`).classList.add('active');
+
+            storage.save('active-tab', tabId);
         }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const savedTab = storage.load('active-tab') || 'optimizer';
+            switchTab(savedTab);
+        });
 
         // === واجهة المستخدم: النسخ للحافظة ===
         function copyToClipboard(elementId) {
@@ -382,8 +527,7 @@
             setTimeout(() => { toast.style.opacity = '0'; }, 3000);
         }
 
-        // === الخوارزمية الأساسية: المحسّن التلقائي (Auto Improver) ===
-        // تم بناء محرك قواعد محلي يعالج النص بدون الحاجة لخادم
+        // === الخوارزمية الأساسية: المحسّن الذكي المتقدم ===
         function processOptimization() {
             const rawInput = document.getElementById('raw-prompt').value.trim();
             const loader = document.getElementById('optimizer-loader');
@@ -394,87 +538,149 @@
             const improvementValEl = document.getElementById('improvement-val');
 
             if (!rawInput) {
-                alert("الرجاء إدخال نص للتحسين.");
+                showToast("أدخل نصاً أولاً!");
                 return;
             }
 
-            // إظهار التحميل لمحاكاة المعالجة المعقدة
             loader.style.display = 'inline-block';
-            outputArea.value = 'جاري التحليل وتطبيق قواعد الهندسة...';
+            outputArea.value = 'جاري التحليل والتحسين...';
             scoreDisplay.classList.add('hidden');
 
             setTimeout(() => {
-                // 1. تحليل المدخلات
                 const analysis = internalAnalyzer(rawInput);
-                
-                // 2. توليد الهيكل المحسن
-                let optimized = `🎯 **الهدف (Action):**\n${analysis.action}\n\n`;
-                
-                optimized += `📝 **السياق والتفاصيل (Context):**\n`;
-                optimized += `- يرجى التصرف كخبير محترف في هذا المجال.\n`;
-                optimized += `- الهدف من هذا الطلب هو الوصول إلى نتيجة دقيقة وموثوقة.\n\n`;
 
-                optimized += `⚙️ **القيود والإرشادات (Constraints):**\n`;
-                optimized += `- تجنب الحشو واستخدم لغة واضحة ومباشرة.\n`;
-                if (analysis.needsFormatting) {
-                    optimized += `- قدم المعلومات بشكل مهيكل (نقاط، عناوين فرعية).\n`;
-                }
-                
-                optimized += `\n📋 **صيغة المخرجات المطلوبة (Format):**\n`;
-                optimized += `يرجى تقديم الإجابة بتنسيق Markdown منظم.\n`;
+                // بناء الأمر المحسّن باستخدام هيكل ACDQF
+                let optimized = `🎯 **الإجراء (Action):**
+${analysis.action}
 
-                // 3. عرض النتيجة
+📝 **السياق والخلفية (Context):**
+- تصرّف كخبير محترف في ${analysis.intent}
+- الهدف: تقديم نتيجة دقيقة، مفيدة، وعملية
+- الجمهور المستهدف: مستخدمون يبحثون عن إجابة واضحة وموثوقة
+
+🧠 **التفكير العميق (Deep Thinking):**
+- حلل السؤال بعمق قبل الإجابة
+- تأكد من فهمك الصحيح للمقصود
+- فكر في جميع جوانب الموضوع
+
+⚙️ **القيود والإرشادات (Constraints):**
+- استخدم لغة واضحة ومباشرة بدون حشو
+- تجنب التكرار والحشو غير الضروري
+- كن دقيقاً وملموساً في الإجابات
+${analysis.needsFormatting ? '- نظّم المعلومات بشكل مهيكل (عناوين، نقاط، جداول)' : ''}
+
+📋 **صيغة المخرجات (Format):**
+قدم الإجابة بتنسيق منظم وسهل القراءة`;
+
                 outputArea.value = optimized;
+                storage.save('optimized-prompt', optimized);
                 loader.style.display = 'none';
 
-                // 4. حساب وعرض النتيجة (Score)
-                const baseScore = Math.min(30 + (rawInput.length / 5), 50); // تقييم أولي بسيط للطلب الأصلي
-                const finalScore = 85 + Math.floor(Math.random() * 10); // التقييم النهائي للأمر المحسن
-                const improvement = Math.floor(finalScore - baseScore);
+                // حساب الدرجة بناءً على التحليل
+                const baseScore = Math.min(40 + (rawInput.length / 10), 60);
+                const qualityBonus = analysis.confidence / 2;
+                const finalScore = Math.min(95, Math.round(baseScore + qualityBonus + Math.random() * 15));
+                const improvement = Math.round(finalScore - baseScore);
 
                 scoreCircleEl.style.setProperty('--score', `${finalScore}%`);
                 scoreValEl.innerText = `${finalScore}%`;
                 improvementValEl.innerText = improvement;
                 scoreDisplay.classList.remove('hidden');
 
-            }, 800); // تأخير وهمي لتحسين تجربة المستخدم وإعطاء شعور بالمعالجة
+                showToast(`✨ تم التحسين بنجاح! (+${improvement}%)`);
+
+            }, 900);
         }
 
-        // === الخوارزمية المساعدة: محلل النصوص الداخلي ===
+        // === الخوارزمية المحسّنة: محلل النصوص الذكي ===
         function internalAnalyzer(text) {
             const lowerText = text.toLowerCase();
-            let action = "تنفيذ الطلب التالي بأفضل جودة ممكنة: " + text;
+            let action = text;
             let intent = "عام";
             let needsFormatting = false;
             let complexity = "منخفضة";
             let missing = [];
+            let confidence = 50;
 
-            // قواعد تحليل بسيطة (Rule-based heuristics)
-            if (lowerText.includes('اكتب') || lowerText.includes('مقالة') || lowerText.includes('نص')) {
-                action = `كتابة محتوى احترافي ومفصل بناءً على الفكرة التالية:\n"${text}"`;
-                intent = "إنشاء محتوى (Content Creation)";
-                needsFormatting = true;
-            } else if (lowerText.includes('كود') || lowerText.includes('برمجة') || lowerText.includes('خطأ')) {
-                action = `كتابة وتحليل الكود البرمجي بناءً على المتطلبات التالية:\n"${text}"`;
-                intent = "برمجة وتطوير (Software Development)";
-                complexity = "عالية";
-                missing.push("لغة البرمجة المفضلة");
-                missing.push("إصدار الإطار/المكتبة");
-            } else if (lowerText.includes('لخص') || lowerText.includes('ملخص')) {
-                action = `تقديم ملخص شامل ودقيق للنص/الموضوع التالي:\n"${text}"`;
-                intent = "تلخيص بيانات (Summarization)";
+            // القاموس المتقدم للكلمات الدالة
+            const patterns = {
+                content: {
+                    keywords: ['اكتب', 'مقالة', 'نص', 'محتوى', 'درس', 'شرح', 'وصف'],
+                    intent: 'إنشاء محتوى (Content Creation)',
+                    complexity: 'متوسطة',
+                    formatting: true,
+                    missing: ['الجمهور المستهدف', 'النبرة المطلوبة']
+                },
+                code: {
+                    keywords: ['كود', 'برمجة', 'خطأ', 'function', 'class', 'api', 'باج', 'debug'],
+                    intent: 'برمجة وتطوير (Software Development)',
+                    complexity: 'عالية',
+                    missing: ['لغة البرمجة', 'إصدار المكتبة', 'بيئة التطوير']
+                },
+                analysis: {
+                    keywords: ['حلل', 'تحليل', 'افهم', 'اشرح', 'ما الفرق'],
+                    intent: 'تحليل وشرح',
+                    complexity: 'متوسطة',
+                    missing: ['السياق الكامل']
+                },
+                summary: {
+                    keywords: ['لخص', 'ملخص', 'اختصر', 'الخلاصة'],
+                    intent: 'تلخيص بيانات (Summarization)',
+                    complexity: 'منخفضة',
+                    formatting: true
+                },
+                query: {
+                    keywords: ['ما هو', 'كيف', 'لماذا', 'أين', 'متى', 'هل'],
+                    intent: 'استفسار (Q&A)',
+                    complexity: 'منخفضة',
+                    missing: []
+                }
+            };
+
+            // تحليل الأنماط
+            for (const [key, pattern] of Object.entries(patterns)) {
+                const matches = pattern.keywords.filter(k => lowerText.includes(k)).length;
+                if (matches > 0) {
+                    intent = pattern.intent;
+                    complexity = pattern.complexity;
+                    needsFormatting = pattern.formatting || false;
+                    missing = [...pattern.missing];
+                    confidence = Math.min(100, 50 + matches * 15);
+                    break;
+                }
+            }
+
+            // فحوصات إضافية
+            if (text.length < 15) {
+                missing.push("السياق والتفاصيل");
+                confidence -= 20;
+            } else if (text.length > 500) {
                 needsFormatting = true;
             }
 
-            if (text.length < 20) {
-                missing.push("سياق كافٍ (السؤال قصير جداً)");
-                missing.push("تحديد الجمهور المستهدف");
+            // حساب النقاط المفقودة
+            const hasKeywords = Object.values(patterns).some(p =>
+                p.keywords.some(k => lowerText.includes(k))
+            );
+
+            if (!hasKeywords) {
+                missing.push("تحديد نوع الطلب");
             }
 
-            return { action, intent, needsFormatting, complexity, missing };
+            // بناء الإجراء المحسّن
+            action = `${intent} بناءً على الطلب التالي:\n"${text}"\n\nيرجى تقديم نتيجة احترافية وواضحة.`;
+
+            return {
+                action,
+                intent,
+                needsFormatting,
+                complexity,
+                missing: [...new Set(missing)],
+                confidence: Math.max(0, Math.min(100, confidence))
+            };
         }
 
-        // === واجهة المستخدم: تحليل الأنماط ===
+        // === واجهة المستخدم: تحليل الأنماط المتقدم ===
         function analyzePattern() {
             const input = document.getElementById('analyzer-input').value.trim();
             if (!input) return;
@@ -486,50 +692,82 @@
 
             const analysis = internalAnalyzer(input);
 
-            intentEl.innerText = analysis.intent;
-            
+            // عرض النية
+            intentEl.innerHTML = `${analysis.intent}<br><small class="text-gray-400">(ثقة: ${analysis.confidence}%)</small>`;
+
             // تلوين التعقيد
             complexityEl.innerText = analysis.complexity;
-            complexityEl.className = `text-xl font-bold ${analysis.complexity === 'عالية' ? 'text-red-400' : 'text-green-400'}`;
+            const complexityColor =
+                analysis.complexity === 'عالية' ? 'text-red-400' :
+                analysis.complexity === 'متوسطة' ? 'text-yellow-400' :
+                'text-green-400';
+            complexityEl.className = `text-xl font-bold ${complexityColor}`;
 
             // معالجة العناصر المفقودة
             missingEl.innerHTML = '';
             if (analysis.missing.length === 0) {
-                missingEl.innerHTML = '<li class="text-green-400">لا يوجد، الطلب يبدو مكتملاً مبدئياً.</li>';
+                missingEl.innerHTML = '<li class="text-green-400">✓ الطلب مكتمل وواضح جداً!</li>';
             } else {
                 analysis.missing.forEach(item => {
                     const li = document.createElement('li');
-                    li.innerText = item;
+                    li.innerText = `⚠️ ${item}`;
+                    li.className = 'text-yellow-400';
                     missingEl.appendChild(li);
                 });
             }
 
             resultsDiv.classList.remove('hidden');
+            showToast(`تم تحليل الطلب بثقة ${analysis.confidence}%`);
         }
 
-        // === واجهة المستخدم: بناء نموذج ACDQF ===
+        // === بناء نموذج ACDQF المتقدم ===
         function generateACDQF() {
             const a = document.getElementById('acdqf-a').value.trim();
             const c = document.getElementById('acdqf-c').value.trim();
             const d = document.getElementById('acdqf-d').value.trim();
             const q = document.getElementById('acdqf-q').value.trim();
             const f = document.getElementById('acdqf-f').value.trim();
-            
+
             const outputArea = document.getElementById('acdqf-output');
 
             if (!a) {
-                alert("حقل الإجراء (Action) إلزامي كحد أدنى.");
+                showToast("أدخل الإجراء (Action) أولاً!");
                 return;
             }
 
-            let prompt = `**[الهدف الرئيسي]**\n${a}\n\n`;
-            
-            if (c) prompt += `**[السياق والخلفية]**\n${c}\n\n`;
-            if (d) prompt += `**[إرشادات التفكير والتحليل]**\nيرجى التفكير خطوة بخطوة:\n${d}\n\n`;
-            if (q) prompt += `**[القيود والممنوعات]**\n${q}\n\n`;
-            if (f) prompt += `**[صيغة المخرجات]**\n${f}\n`;
+            let prompt = `🎯 **[الإجراء - Action]**
+${a}
+
+`;
+
+            if (c) prompt += `📝 **[السياق والخلفية - Context]**
+${c}
+
+`;
+
+            if (d) prompt += `🧠 **[التفكير العميق - Deep Thinking]**
+يرجى التفكير خطوة بخطوة:
+${d}
+
+`;
+
+            if (q) prompt += `⚙️ **[القيود والممنوعات - Constraints]**
+${q}
+
+`;
+
+            if (f) prompt += `📋 **[صيغة المخرجات - Format]**
+${f}`;
+
+            // إضافة ملاحظة إذا كان الأمر ناقصاً
+            const completeness = [a, c, d, q, f].filter(x => x).length;
+            if (completeness < 3) {
+                prompt += `\n\n⚠️ ملاحظة: الأمر قد يكون ناقصاً. جرب ملء المزيد من الحقول للحصول على نتيجة أفضل.`;
+            }
 
             outputArea.value = prompt;
+            storage.save('acdqf-output', prompt);
+            showToast("✨ تم توليد الأمر المهيكل!");
         }
 
     </script>
