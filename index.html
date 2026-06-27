@@ -361,6 +361,336 @@
             background: rgba(59, 130, 246, 0.05);
         }
 
+        /* CTA Button - Advanced Engineering */
+        .cta-button {
+            position: relative;
+            background: linear-gradient(135deg, #3b82f6 0%, #2563eb 50%, #1d4ed8 100%);
+            color: white;
+            font-weight: 600;
+            padding: 14px 40px;
+            border-radius: 12px;
+            border: 2px solid transparent;
+            cursor: pointer;
+            font-size: 16px;
+            overflow: hidden;
+            transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+            box-shadow: 0 10px 30px rgba(59, 130, 246, 0.3),
+                        inset 0 1px 1px rgba(255, 255, 255, 0.2);
+        }
+
+        .cta-button::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+            transition: left 0.6s ease-in-out;
+        }
+
+        .cta-button:hover::before {
+            left: 100%;
+        }
+
+        .cta-button:hover {
+            transform: translateY(-3px) scale(1.02);
+            box-shadow: 0 16px 40px rgba(59, 130, 246, 0.5),
+                        inset 0 1px 1px rgba(255, 255, 255, 0.3);
+            border-color: rgba(255, 255, 255, 0.2);
+            background: linear-gradient(135deg, #60a5fa 0%, #3b82f6 50%, #2563eb 100%);
+        }
+
+        .cta-button:active {
+            transform: translateY(-1px) scale(0.98);
+            box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3),
+                        inset 0 2px 4px rgba(0, 0, 0, 0.2);
+        }
+
+        /* Feature Cards - Advanced Animations */
+        header > div > div:nth-child(4) > div {
+            position: relative;
+            overflow: hidden;
+            border-radius: 12px;
+            background: linear-gradient(135deg, rgba(59, 130, 246, 0.05) 0%, rgba(139, 92, 246, 0.05) 100%);
+            border: 1px solid rgba(59, 130, 246, 0.2);
+            backdrop-filter: blur(10px);
+        }
+
+        header > div > div:nth-child(4) > div::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: radial-gradient(circle at 50% 0%, rgba(59, 130, 246, 0.1), transparent 70%);
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        header > div > div:nth-child(4) > div:hover::before {
+            opacity: 1;
+        }
+
+        header > div > div:nth-child(4) > div:hover {
+            transform: translateY(-8px);
+            border-color: rgba(59, 130, 246, 0.5);
+            background: linear-gradient(135deg, rgba(59, 130, 246, 0.1) 0%, rgba(139, 92, 246, 0.08) 100%);
+            box-shadow: 0 12px 40px rgba(59, 130, 246, 0.25),
+                        0 0 40px rgba(139, 92, 246, 0.1);
+        }
+
+        /* Scroll Indicator - Advanced */
+        .scroll-indicator {
+            position: fixed;
+            bottom: 40px;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 40;
+            opacity: 1;
+            transition: opacity 0.4s ease-in-out;
+            pointer-events: auto;
+        }
+
+        .scroll-indicator > div {
+            position: relative;
+            padding: 12px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, rgba(59, 130, 246, 0.1), rgba(139, 92, 246, 0.1));
+            border: 2px solid rgba(34, 211, 238, 0.3);
+            backdrop-filter: blur(10px);
+            animation: bounce 2.5s cubic-bezier(0.68, -0.55, 0.265, 1.55) infinite;
+        }
+
+        .scroll-indicator:hover > div {
+            animation: none;
+        }
+
+        .scroll-indicator i {
+            animation: moveDown 2.5s cubic-bezier(0.68, -0.55, 0.265, 1.55) infinite;
+        }
+
+        @keyframes bounce {
+            0%, 100% {
+                transform: translateY(0);
+            }
+            50% {
+                transform: translateY(-15px);
+            }
+        }
+
+        @keyframes moveDown {
+            0%, 100% {
+                transform: translateY(-4px);
+                opacity: 1;
+            }
+            50% {
+                transform: translateY(4px);
+                opacity: 0.6;
+            }
+        }
+
+        /* Focus States - Accessibility */
+        button:focus {
+            outline: none;
+            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.5);
+        }
+
+        textarea:focus {
+            outline: none;
+            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.2);
+        }
+
+        input:focus {
+            outline: none;
+            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.2);
+        }
+
+        /* Smooth Transitions */
+        button, a, [role="button"], textarea, input {
+            transition-property: background-color, border-color, color, fill, stroke, opacity, box-shadow, transform;
+            transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+            transition-duration: 200ms;
+        }
+
+        /* Reduce motion */
+        @media (prefers-reduced-motion: reduce) {
+            * {
+                animation-duration: 0.01ms !important;
+                animation-iteration-count: 1 !important;
+                transition-duration: 0.01ms !important;
+            }
+        }
+
+        /* Performance Optimization */
+        button, a, [role="button"] {
+            will-change: transform;
+        }
+
+        /* Advanced Shadow System */
+        .glass-panel {
+            --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.1);
+            --shadow-md: 0 8px 24px rgba(0, 0, 0, 0.2);
+            --shadow-lg: 0 16px 40px rgba(0, 0, 0, 0.3);
+        }
+
+        /* Staggered Animation for Feature Cards */
+        header > div > div:nth-child(4) > div:nth-child(1) {
+            animation: slideInUp 0.8s ease-out 0.5s both;
+        }
+
+        header > div > div:nth-child(4) > div:nth-child(2) {
+            animation: slideInUp 0.8s ease-out 0.6s both;
+        }
+
+        header > div > div:nth-child(4) > div:nth-child(3) {
+            animation: slideInUp 0.8s ease-out 0.7s both;
+        }
+
+        @keyframes slideInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Enhanced Header Text Animation */
+        header > div > div:nth-child(2) {
+            animation: fadeInDown 0.8s ease-out 0.1s both;
+        }
+
+        header > div > div:nth-child(3) {
+            animation: fadeInUp 0.8s ease-out 0.3s both;
+        }
+
+        @keyframes fadeInDown {
+            from {
+                opacity: 0;
+                transform: translateY(-20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Gradient Text Animation */
+        header h1 {
+            background-size: 200% auto;
+            animation: gradientShift 8s linear infinite, fadeInScale 0.8s ease-out both;
+        }
+
+        @keyframes gradientShift {
+            0% {
+                background-position: 0% center;
+            }
+            100% {
+                background-position: 200% center;
+            }
+        }
+
+        /* Feature Buttons - Interactive */
+        .feature-button {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 14px 24px;
+            border-radius: 12px;
+            border: 2px solid rgba(59, 130, 246, 0.3);
+            background: linear-gradient(135deg, rgba(59, 130, 246, 0.08) 0%, rgba(139, 92, 246, 0.06) 100%);
+            cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            backdrop-filter: blur(10px);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .feature-button::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+            transition: left 0.5s ease;
+        }
+
+        .feature-button:hover::before {
+            left: 100%;
+        }
+
+        .feature-button:hover {
+            transform: translateY(-6px);
+            border-color: rgba(59, 130, 246, 0.6);
+            background: linear-gradient(135deg, rgba(59, 130, 246, 0.15) 0%, rgba(139, 92, 246, 0.12) 100%);
+            box-shadow: 0 12px 32px rgba(59, 130, 246, 0.25),
+                        0 0 40px rgba(139, 92, 246, 0.15);
+        }
+
+        .feature-button:active {
+            transform: translateY(-2px);
+        }
+
+        .feature-icon {
+            font-size: 24px;
+        }
+
+        .feature-info {
+            text-align: right;
+        }
+
+        .feature-title {
+            font-weight: 600;
+            color: #e2e8f0;
+            margin: 0;
+            font-size: 14px;
+        }
+
+        .feature-desc {
+            font-size: 12px;
+            color: #cbd5e1;
+            margin: 4px 0 0 0;
+        }
+
+        .feature-button:hover .feature-title {
+            color: #60a5fa;
+        }
+
+        .feature-button:hover .feature-desc {
+            color: #7dd3fc;
+        }
+
+        @media (max-width: 768px) {
+            .feature-button {
+                padding: 12px 16px;
+                font-size: 13px;
+                flex-direction: column;
+                text-align: center;
+                width: calc(50% - 8px);
+            }
+
+            .feature-info {
+                text-align: center;
+            }
+        }
+
     </style>
 </head>
 <body class="text-gray-200">
@@ -370,7 +700,7 @@
         <div class="container mx-auto px-4 py-8">
             <!-- Title -->
             <div class="text-center mb-4">
-                <h1 class="text-5xl md:text-6xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-blue-400 via-cyan-300 to-purple-400 mb-2 tracking-wide">
+                <h1 class="text-5xl md:text-7xl font-black bg-clip-text text-transparent bg-gradient-to-r from-blue-400 via-cyan-300 to-purple-400 mb-2 tracking-wider letter-spacing-[0.05em]" style="line-height: 1.1;">
                     HYPE NET
                 </h1>
                 <div class="flex items-center justify-center gap-3">
@@ -381,12 +711,24 @@
             </div>
 
             <!-- Welcome Message -->
-            <div class="text-center max-w-2xl mx-auto">
-                <p class="text-gray-300 text-sm md:text-base leading-relaxed">
-                    <span class="text-cyan-400 font-semibold">مرحباً بك في</span>
-                    منصة تحسين الأوامر الذكية | قم بتحويل طلباتك العادية إلى أوامر احترافية
-                    <span class="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-purple-400"> متقدمة</span>
+            <div class="text-center max-w-3xl mx-auto space-y-6">
+                <p class="text-gray-300 text-base md:text-lg leading-relaxed font-light">
+                    حوّل أفكارك البسيطة إلى
+                    <span class="text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 via-blue-400 to-purple-400 font-semibold">أوامر احترافية ذكية</span>
+                    باستخدام قوة الذكاء الاصطناعي
                 </p>
+
+                <!-- CTA Button -->
+                <div class="flex justify-center pt-2">
+                    <button onclick="switchTab('optimizer'); setTimeout(() => document.getElementById('raw-prompt').focus(), 100);" class="cta-button group">
+                        <span class="relative flex items-center gap-2">
+                            <i class="ph ph-lightning text-xl group-hover:animate-pulse"></i>
+                            <span>ابدأ الآن - حسّن أول طلب لك</span>
+                            <i class="ph ph-arrow-right text-lg group-hover:translate-x-1 transition-transform"></i>
+                        </span>
+                        <div class="absolute inset-0 bg-gradient-to-r from-blue-500 to-purple-500 rounded-xl blur opacity-0 group-hover:opacity-75 transition-opacity -z-10"></div>
+                    </button>
+                </div>
             </div>
 
             <!-- Status Bar -->
@@ -397,29 +739,29 @@
                 </span>
             </div>
 
-            <!-- Features -->
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mt-8 pt-6 border-t border-gray-700/30">
-                <div class="text-center p-3">
-                    <div class="text-blue-400 text-2xl mb-2">✨</div>
-                    <p class="text-sm text-gray-300">
-                        <span class="font-semibold">تحسين ذكي</span><br/>
-                        <span class="text-gray-500">حوّل أفكارك إلى أوامر احترافية</span>
-                    </p>
-                </div>
-                <div class="text-center p-3">
-                    <div class="text-cyan-400 text-2xl mb-2">🔍</div>
-                    <p class="text-sm text-gray-300">
-                        <span class="font-semibold">تحليل متقدم</span><br/>
-                        <span class="text-gray-500">افهم نوايا طلبك بعمق</span>
-                    </p>
-                </div>
-                <div class="text-center p-3">
-                    <div class="text-purple-400 text-2xl mb-2">🎯</div>
-                    <p class="text-sm text-gray-300">
-                        <span class="font-semibold">نموذج ACDQF</span><br/>
-                        <span class="text-gray-500">هيكل احترافي لأوامرك</span>
-                    </p>
-                </div>
+            <!-- Interactive Feature Buttons -->
+            <div class="flex flex-wrap justify-center gap-4 mt-8 pt-6 border-t border-gray-700/30" id="features-section">
+                <button onclick="switchTab('optimizer')" class="feature-button optimizer-button" title="تحسين ذكي">
+                    <div class="feature-icon">✨</div>
+                    <div class="feature-info">
+                        <p class="feature-title">تحسين ذكي</p>
+                        <p class="feature-desc">حوّل أفكارك لأوامر</p>
+                    </div>
+                </button>
+                <button onclick="switchTab('analyzer')" class="feature-button analyzer-button" title="تحليل متقدم">
+                    <div class="feature-icon">🔍</div>
+                    <div class="feature-info">
+                        <p class="feature-title">تحليل متقدم</p>
+                        <p class="feature-desc">افهم نوايا طلبك</p>
+                    </div>
+                </button>
+                <button onclick="switchTab('acdqf')" class="feature-button acdqf-button" title="نموذج ACDQF">
+                    <div class="feature-icon">🎯</div>
+                    <div class="feature-info">
+                        <p class="feature-title">نموذج ACDQF</p>
+                        <p class="feature-desc">هيكل احترافي</p>
+                    </div>
+                </button>
             </div>
         </div>
     </header>
@@ -697,6 +1039,16 @@
         </div>
     </footer>
 
+    <!-- Scroll Indicator -->
+    <div id="scroll-indicator" class="scroll-indicator">
+        <div class="text-center">
+            <div class="text-cyan-400 text-2xl mb-2">
+                <i class="ph ph-caret-down"></i>
+            </div>
+            <p class="text-xs text-gray-500 whitespace-nowrap">مرر للأسفل</p>
+        </div>
+    </div>
+
     <!-- Toast Notification -->
     <div id="toast" class="fixed bottom-20 md:bottom-4 left-1/2 transform -translate-x-1/2 bg-gradient-to-r from-green-600 to-green-500 text-white px-6 py-3 rounded-full shadow-lg opacity-0 transition-opacity duration-300 pointer-events-none z-50 flex items-center gap-2">
         <i class="ph ph-check-circle text-xl"></i>
@@ -705,6 +1057,28 @@
 
     <!-- Scripts -->
     <script>
+        // === نظام الـ Scroll Indicator الذكي ===
+        window.addEventListener('scroll', () => {
+            const scrollIndicator = document.getElementById('scroll-indicator');
+            const headerHeight = document.querySelector('header').offsetHeight;
+
+            if (window.scrollY > headerHeight * 0.5) {
+                scrollIndicator.style.opacity = '0';
+                scrollIndicator.style.pointerEvents = 'none';
+            } else {
+                scrollIndicator.style.opacity = '1';
+                scrollIndicator.style.pointerEvents = 'auto';
+            }
+        });
+
+        // === تحسينات الـ CTA Button ===
+        const ctaButton = document.querySelector('.cta-button');
+        if (ctaButton) {
+            ctaButton.addEventListener('mouseenter', function() {
+                this.style.setProperty('--glow', '1');
+            });
+        }
+
         // === نظام التخزين المحلي (LocalStorage) ===
         const storage = {
             save: (key, value) => localStorage.setItem(`hype-net-${key}`, JSON.stringify(value)),
