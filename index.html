@@ -605,7 +605,60 @@
         }
 
         .feature-icon {
-            font-size: 24px;
+            font-size: 22px;
+            width: 46px;
+            height: 46px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 14px;
+            background: linear-gradient(135deg, rgba(59, 130, 246, 0.18), rgba(139, 92, 246, 0.14));
+            border: 1px solid rgba(59, 130, 246, 0.25);
+            flex-shrink: 0;
+            transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .feature-button:hover .feature-icon {
+            transform: scale(1.1) rotate(-4deg);
+            border-color: rgba(59, 130, 246, 0.5);
+        }
+
+        /* Hero polish: شارة علوية + توهّج خلفي */
+        .hero-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 6px 16px;
+            margin-bottom: 18px;
+            border-radius: 9999px;
+            font-size: 12px;
+            font-weight: 600;
+            letter-spacing: 0.02em;
+            color: #93c5fd;
+            background: linear-gradient(135deg, rgba(59, 130, 246, 0.15), rgba(139, 92, 246, 0.12));
+            border: 1px solid rgba(59, 130, 246, 0.3);
+            backdrop-filter: blur(10px);
+            animation: fadeInScale 0.8s ease-out both;
+        }
+
+        .hero-glow {
+            position: absolute;
+            top: -60px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 520px;
+            height: 320px;
+            max-width: 90vw;
+            background: radial-gradient(ellipse at center, rgba(59, 130, 246, 0.18) 0%, rgba(139, 92, 246, 0.12) 35%, transparent 70%);
+            filter: blur(20px);
+            pointer-events: none;
+            z-index: 0;
+            animation: glowPulse 6s ease-in-out infinite;
+        }
+
+        @keyframes glowPulse {
+            0%, 100% { opacity: 0.6; }
+            50% { opacity: 1; }
         }
 
         .feature-info {
@@ -681,9 +734,16 @@
 
     <!-- Header -->
     <header class="border-b border-gray-700/30 bg-gradient-to-b from-dark/95 to-darker/80 sticky top-0 z-50 backdrop-blur-xl">
-        <div class="container mx-auto px-4 py-8 md:py-10">
+        <div class="container mx-auto px-4 py-8 md:py-10 relative">
+            <!-- Decorative glow -->
+            <div class="hero-glow" aria-hidden="true"></div>
+
             <!-- Brand -->
-            <div class="text-center mb-5">
+            <div class="text-center mb-5 relative z-10">
+                <span class="hero-badge">
+                    <i class="ph ph-sparkle"></i>
+                    مدعوم بالذكاء الاصطناعي · الإصدار 4.0
+                </span>
                 <h1 class="text-5xl md:text-7xl font-black bg-clip-text text-transparent bg-gradient-to-r from-blue-400 via-cyan-300 to-purple-400 mb-2 tracking-wider" style="line-height: 1.1;">
                     HYPE NET
                 </h1>
@@ -695,7 +755,7 @@
             </div>
 
             <!-- Tagline + CTA + Status -->
-            <div class="header-tagline text-center max-w-2xl mx-auto">
+            <div class="header-tagline text-center max-w-2xl mx-auto relative z-10">
                 <p class="text-gray-300 text-base md:text-lg leading-relaxed font-light">
                     حوّل أفكارك البسيطة إلى
                     <span class="text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 via-blue-400 to-purple-400 font-semibold">أوامر احترافية ذكية</span>
@@ -719,7 +779,7 @@
             </div>
 
             <!-- Quick Access (تنقّل سريع) -->
-            <div class="flex flex-wrap justify-center gap-4 mt-8 pt-6 border-t border-gray-700/30" id="features-section">
+            <div class="flex flex-wrap justify-center gap-4 mt-8 pt-6 border-t border-gray-700/30 relative z-10" id="features-section">
                 <button onclick="switchTab('optimizer')" class="feature-button optimizer-button" title="تحسين ذكي">
                     <div class="feature-icon">✨</div>
                     <div class="feature-info">
