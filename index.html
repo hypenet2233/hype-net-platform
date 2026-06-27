@@ -27,8 +27,18 @@
         }
     </script>
     <style>
+        /* Z-Index System */
+        :root {
+            --z-base: 1;
+            --z-content: 10;
+            --z-header: 50;
+            --z-fixed: 40;
+            --z-modal: 100;
+        }
+
         /* تحسينات بصرية احترافية متقدمة */
-        * {
+        /* تم إزالة transition عام لتحسين الأداء */
+        button, a, [role="button"] {
             transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
         }
 
@@ -146,6 +156,16 @@
             border-bottom: 3px solid;
             border-image: linear-gradient(90deg, #3b82f6, #60a5fa) 1;
             box-shadow: 0 4px 12px rgba(59, 130, 246, 0.2);
+        }
+
+        /* Accessibility: Focus-Visible States */
+        button:focus-visible,
+        a:focus-visible,
+        input:focus-visible,
+        textarea:focus-visible {
+            outline: 2px solid #60a5fa;
+            outline-offset: 2px;
+            border-radius: 4px;
         }
 
         .tab-content {
@@ -337,7 +357,7 @@
         }
 
         /* Header Features Animation */
-        header > div > div:nth-child(4) {
+        #features-section {
             animation: fadeInUp 0.8s ease-out 0.4s both;
         }
 
@@ -352,11 +372,11 @@
             }
         }
 
-        header > div > div:nth-child(4) > div {
+        #features-section .feature-button {
             transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
         }
 
-        header > div > div:nth-child(4) > div:hover {
+        #features-section .feature-button:hover {
             transform: translateY(-4px);
             background: rgba(59, 130, 246, 0.05);
         }
@@ -536,15 +556,15 @@
         }
 
         /* Staggered Animation for Feature Cards */
-        header > div > div:nth-child(4) > div:nth-child(1) {
+        .feature-button:nth-of-type(1) {
             animation: slideInUp 0.8s ease-out 0.5s both;
         }
 
-        header > div > div:nth-child(4) > div:nth-child(2) {
+        .feature-button:nth-of-type(2) {
             animation: slideInUp 0.8s ease-out 0.6s both;
         }
 
-        header > div > div:nth-child(4) > div:nth-child(3) {
+        .feature-button:nth-of-type(3) {
             animation: slideInUp 0.8s ease-out 0.7s both;
         }
 
@@ -691,6 +711,34 @@
             }
         }
 
+        /* Extra Small Devices */
+        @media (max-width: 380px) {
+            h1 {
+                font-size: 2.5rem !important;
+                letter-spacing: -0.02em;
+            }
+
+            .feature-button {
+                width: 100%;
+                padding: 10px 12px;
+                font-size: 12px;
+            }
+
+            .cta-button {
+                padding: 12px 24px;
+                font-size: 14px;
+            }
+
+            .tab-btn span {
+                display: none;
+            }
+
+            .tab-btn {
+                width: auto;
+                padding: 8px 12px !important;
+            }
+        }
+
     </style>
 </head>
 <body class="text-gray-200">
@@ -704,9 +752,9 @@
                     HYPE NET
                 </h1>
                 <div class="flex items-center justify-center gap-3">
-                    <div class="h-px bg-gradient-to-r from-transparent to-blue-500 w-12"></div>
+                    <div class="h-px bg-gradient-to-r from-transparent to-blue-500 w-12" aria-hidden="true"></div>
                     <p class="text-sm md:text-base text-gray-400 font-light tracking-widest">AI PROMPT ENGINEERING</p>
-                    <div class="h-px bg-gradient-to-l from-transparent to-purple-500 w-12"></div>
+                    <div class="h-px bg-gradient-to-l from-transparent to-purple-500 w-12" aria-hidden="true"></div>
                 </div>
             </div>
 
@@ -720,7 +768,7 @@
 
                 <!-- CTA Button -->
                 <div class="flex justify-center pt-2">
-                    <button onclick="switchTab('optimizer'); setTimeout(() => document.getElementById('raw-prompt').focus(), 100);" class="cta-button group">
+                    <button onclick="switchTab('optimizer', true)" class="cta-button group">
                         <span class="relative flex items-center gap-2">
                             <i class="ph ph-lightning text-xl group-hover:animate-pulse"></i>
                             <span>ابدأ الآن - حسّن أول طلب لك</span>
@@ -1040,9 +1088,9 @@
     </footer>
 
     <!-- Scroll Indicator -->
-    <div id="scroll-indicator" class="scroll-indicator">
+    <div id="scroll-indicator" class="scroll-indicator" aria-label="مرر للأسفل لمزيد من المحتوى" role="status" aria-live="polite">
         <div class="text-center">
-            <div class="text-cyan-400 text-2xl mb-2">
+            <div class="text-cyan-400 text-2xl mb-2" aria-hidden="true">
                 <i class="ph ph-caret-down"></i>
             </div>
             <p class="text-xs text-gray-500 whitespace-nowrap">مرر للأسفل</p>
@@ -1081,7 +1129,17 @@
 
         // === نظام التخزين المحلي (LocalStorage) ===
         const storage = {
-            save: (key, value) => localStorage.setItem(`hype-net-${key}`, JSON.stringify(value)),
+            save: (key, value) => {
+                try {
+                    localStorage.setItem(`hype-net-${key}`, JSON.stringify(value));
+                } catch (e) {
+                    if (e.name === 'QuotaExceededError') {
+                        console.warn('تخزين ممتلئ - يرجى مسح البيانات القديمة');
+                    } else if (e.name === 'SecurityError') {
+                        console.warn('لا يمكن الوصول للتخزين المحلي في هذا الوضع');
+                    }
+                }
+            },
             load: (key) => {
                 try {
                     return JSON.parse(localStorage.getItem(`hype-net-${key}`));
@@ -1089,7 +1147,13 @@
                     return null;
                 }
             },
-            clear: (key) => localStorage.removeItem(`hype-net-${key}`)
+            clear: (key) => {
+                try {
+                    localStorage.removeItem(`hype-net-${key}`);
+                } catch (e) {
+                    console.warn('خطأ في حذف البيانات:', e);
+                }
+            }
         };
 
         window.addEventListener('beforeunload', () => {
@@ -1107,7 +1171,7 @@
         });
 
         // === نظام التنقل بين النوافذ (Tab Navigation) ===
-        function switchTab(tabId) {
+        function switchTab(tabId, autoFocus = false) {
             document.querySelectorAll('.tab-content').forEach(el => el.classList.remove('active'));
             document.querySelectorAll('.tab-btn').forEach(el => el.classList.remove('active'));
 
@@ -1115,6 +1179,13 @@
             document.getElementById(`btn-${tabId}`).classList.add('active');
 
             storage.save('active-tab', tabId);
+
+            if (autoFocus) {
+                requestAnimationFrame(() => {
+                    const focusTarget = document.getElementById('raw-prompt');
+                    if (focusTarget) focusTarget.focus();
+                });
+            }
         }
 
         document.addEventListener('DOMContentLoaded', () => {
@@ -1125,16 +1196,25 @@
         // === واجهة المستخدم: النسخ للحافظة ===
         function copyToClipboard(elementId) {
             const el = document.getElementById(elementId);
-            if (!el.value.trim()) return;
+            if (!el || !el.value.trim()) return;
 
-            // استخدام واجهة Clipboard API الحديثة مع fallback
             if (navigator.clipboard && window.isSecureContext) {
-                navigator.clipboard.writeText(el.value).then(showToast);
+                navigator.clipboard.writeText(el.value)
+                    .then(() => showToast("تم النسخ بنجاح!"))
+                    .catch(() => fallbackCopy(el));
             } else {
+                fallbackCopy(el);
+            }
+        }
+
+        function fallbackCopy(el) {
+            try {
                 el.select();
                 document.execCommand('copy');
-                showToast();
+                showToast("تم النسخ بنجاح!");
                 window.getSelection().removeAllRanges();
+            } catch (e) {
+                showToast("خطأ: لم يتمكن من النسخ");
             }
         }
 
@@ -1301,7 +1381,15 @@ ${analysis.needsFormatting ? '- نظّم المعلومات بشكل مهيكل 
         // === واجهة المستخدم: تحليل الأنماط المتقدم ===
         function analyzePattern() {
             const input = document.getElementById('analyzer-input').value.trim();
-            if (!input) return;
+            if (!input) {
+                showToast("يرجى إدخال نص لتحليله");
+                return;
+            }
+
+            if (input.length < 3) {
+                showToast("النص قصير جداً - أدخل نص أطول للحصول على تحليل أفضل");
+                return;
+            }
 
             const resultsDiv = document.getElementById('analyzer-results');
             const intentEl = document.getElementById('analysis-intent');
@@ -1348,10 +1436,13 @@ ${analysis.needsFormatting ? '- نظّم المعلومات بشكل مهيكل 
 
             const outputArea = document.getElementById('acdqf-output');
 
-            if (!a) {
-                showToast("أدخل الإجراء (Action) أولاً!");
+            // التحقق من المدخلات
+            const isEmpty = !a || !c || !d || !q || !f;
+            if (isEmpty) {
+                showToast("يرجى ملء جميع حقول نموذج ACDQF");
                 return;
             }
+
 
             let prompt = `🎯 **[الإجراء - Action]**
 ${a}
