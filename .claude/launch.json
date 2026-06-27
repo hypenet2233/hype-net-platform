@@ -4,8 +4,8 @@
     {
       "name": "hype-net",
       "runtimeExecutable": "python",
-      "runtimeArgs": ["-m", "http.server", "8000", "--bind", "127.0.0.1"],
-      "port": 8000
+      "runtimeArgs": ["-m", "http.server", "9000", "--directory", "C:\\Users\\user\\Desktop\\HYPE NET\\hype-net-platform"],
+      "port": 9000
     }
   ]
 }

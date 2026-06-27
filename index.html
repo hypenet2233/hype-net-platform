@@ -203,12 +203,13 @@
             border-top: 3px solid #3b82f6;
             width: 24px;
             height: 24px;
-            -webkit-animation: spin 1s linear infinite; /* Safari */
             animation: spin 1s linear infinite;
-            display: inline-block;
-            vertical-align: middle;
+            display: none;
             margin-left: 8px;
-            display: none; /* مخفي افتراضياً */
+        }
+
+        .loader.visible {
+            display: inline-block;
         }
 
         @keyframes spin {
@@ -878,7 +879,7 @@
                         <div class="flex flex-col h-1/3">
                             <div class="flex justify-between items-center mb-2">
                                 <label for="raw-prompt" class="text-sm font-semibold bg-clip-text text-transparent bg-gradient-to-r from-purple-400 to-pink-400">📝 الطلب الأصلي (Raw Input)</label>
-                                <button onclick="document.getElementById('raw-prompt').value = ''; storage.clear('raw-prompt'); showToast('تم مسح الخانة')" class="clear-btn" title="مسح الخانة">
+                                <button onclick="clearRawPrompt()" class="clear-btn" title="مسح الخانة">
                                     <i class="ph ph-trash text-sm"></i>
                                 </button>
                             </div>
@@ -899,7 +900,7 @@
                             <div class="flex justify-between items-end mb-2">
                                 <label class="text-sm font-semibold bg-clip-text text-transparent bg-gradient-to-r from-blue-400 to-cyan-400">✨ الطلب المُحسّن (Optimized Prompt)</label>
                                 <div class="flex gap-2">
-                                    <button onclick="document.getElementById('optimized-prompt').value = ''; storage.clear('optimized-prompt'); document.getElementById('score-display').classList.add('hidden'); showToast('تم مسح النتيجة')" class="clear-btn" title="مسح النتيجة">
+                                    <button onclick="clearOptimizedPrompt()" class="clear-btn" title="مسح النتيجة">
                                         <i class="ph ph-trash text-sm"></i>
                                     </button>
                                     <button onclick="copyToClipboard('optimized-prompt')" class="copy-btn" title="نسخ الأمر">
@@ -936,7 +937,7 @@
                     <div class="mb-4">
                         <div class="flex justify-between items-end mb-2">
                             <label class="text-sm text-gray-300">النص المراد تحليله:</label>
-                            <button onclick="document.getElementById('analyzer-input').value = ''; storage.clear('analyzer-input'); showToast('تم مسح النص')" class="clear-btn" title="مسح النص">
+                            <button onclick="clearAnalyzerInput()" class="clear-btn" title="مسح النص">
                                 <i class="ph ph-trash text-sm"></i>
                             </button>
                         </div>
@@ -981,16 +982,7 @@
                     </h2>
                     <div class="flex justify-between items-center mb-4">
                         <p class="text-gray-400 text-sm">نموذج هيكلي احترافي: (Action, Context, Deep Thinking, Questions, Format)</p>
-                        <button onclick="
-                            document.getElementById('acdqf-a').value = '';
-                            document.getElementById('acdqf-c').value = '';
-                            document.getElementById('acdqf-d').value = '';
-                            document.getElementById('acdqf-q').value = '';
-                            document.getElementById('acdqf-f').value = '';
-                            document.getElementById('acdqf-output').value = '';
-                            storage.clear('acdqf-output');
-                            showToast('تم مسح جميع الحقول');
-                        " class="clear-btn" title="مسح جميع الحقول">
+                        <button onclick="clearACDQF()" class="clear-btn" title="مسح جميع الحقول">
                             <i class="ph ph-trash text-sm"></i>
                         </button>
                     </div>
@@ -1028,7 +1020,7 @@
                             <div class="flex justify-between items-center mb-1">
                                 <label class="text-xs font-bold text-gray-300">النتيجة النهائية:</label>
                                 <div class="flex gap-2">
-                                    <button onclick="document.getElementById('acdqf-output').value = ''; storage.clear('acdqf-output'); showToast('تم مسح النتيجة')" class="clear-btn" title="مسح النتيجة">
+                                    <button onclick="clearACDQFOutput()" class="clear-btn" title="مسح النتيجة">
                                         <i class="ph ph-trash text-sm"></i>
                                     </button>
                                     <button onclick="copyToClipboard('acdqf-output')" class="copy-btn" title="نسخ الأمر">
@@ -1106,10 +1098,10 @@
     <!-- Scripts -->
     <script>
         // === نظام الـ Scroll Indicator الذكي ===
-        window.addEventListener('scroll', () => {
-            const scrollIndicator = document.getElementById('scroll-indicator');
-            const headerHeight = document.querySelector('header').offsetHeight;
+        const scrollIndicator = document.getElementById('scroll-indicator');
+        const headerHeight = document.querySelector('header').offsetHeight;
 
+        window.addEventListener('scroll', () => {
             if (window.scrollY > headerHeight * 0.5) {
                 scrollIndicator.style.opacity = '0';
                 scrollIndicator.style.pointerEvents = 'none';
@@ -1118,14 +1110,6 @@
                 scrollIndicator.style.pointerEvents = 'auto';
             }
         });
-
-        // === تحسينات الـ CTA Button ===
-        const ctaButton = document.querySelector('.cta-button');
-        if (ctaButton) {
-            ctaButton.addEventListener('mouseenter', function() {
-                this.style.setProperty('--glow', '1');
-            });
-        }
 
         // === نظام التخزين المحلي (LocalStorage) ===
         const storage = {
@@ -1163,13 +1147,6 @@
             if (analyzerInput) storage.save('analyzer-input', analyzerInput);
         });
 
-        window.addEventListener('load', () => {
-            const savedRaw = storage.load('raw-prompt');
-            const savedAnalyzer = storage.load('analyzer-input');
-            if (savedRaw) document.getElementById('raw-prompt').value = savedRaw;
-            if (savedAnalyzer) document.getElementById('analyzer-input').value = savedAnalyzer;
-        });
-
         // === نظام التنقل بين النوافذ (Tab Navigation) ===
         function switchTab(tabId, autoFocus = false) {
             document.querySelectorAll('.tab-content').forEach(el => el.classList.remove('active'));
@@ -1189,6 +1166,11 @@
         }
 
         document.addEventListener('DOMContentLoaded', () => {
+            const savedRaw = storage.load('raw-prompt');
+            const savedAnalyzer = storage.load('analyzer-input');
+            if (savedRaw) document.getElementById('raw-prompt').value = savedRaw;
+            if (savedAnalyzer) document.getElementById('analyzer-input').value = savedAnalyzer;
+
             const savedTab = storage.load('active-tab') || 'optimizer';
             switchTab(savedTab);
         });
@@ -1240,7 +1222,7 @@
                 return;
             }
 
-            loader.style.display = 'inline-block';
+            loader.classList.add('visible');
             outputArea.value = 'جاري التحليل والتحسين...';
             scoreDisplay.classList.add('hidden');
 
@@ -1272,7 +1254,7 @@ ${analysis.needsFormatting ? '- نظّم المعلومات بشكل مهيكل 
 
                 outputArea.value = optimized;
                 storage.save('optimized-prompt', optimized);
-                loader.style.display = 'none';
+                loader.classList.remove('visible');
 
                 // حساب الدرجة بناءً على التحليل
                 const baseScore = Math.min(40 + (rawInput.length / 10), 60);
@@ -1349,9 +1331,9 @@ ${analysis.needsFormatting ? '- نظّم المعلومات بشكل مهيكل 
             }
 
             // فحوصات إضافية
-            if (text.length < 15) {
+            if (text.length < 10) {
                 missing.push("السياق والتفاصيل");
-                confidence -= 20;
+                confidence = Math.max(0, confidence - 20);
             } else if (text.length > 500) {
                 needsFormatting = true;
             }
@@ -1426,6 +1408,43 @@ ${analysis.needsFormatting ? '- نظّم المعلومات بشكل مهيكل 
             showToast(`تم تحليل الطلب بثقة ${analysis.confidence}%`);
         }
 
+        // === دوال مسح الحقول ===
+        function clearRawPrompt() {
+            document.getElementById('raw-prompt').value = '';
+            storage.clear('raw-prompt');
+            showToast('تم مسح الخانة');
+        }
+
+        function clearOptimizedPrompt() {
+            document.getElementById('optimized-prompt').value = '';
+            storage.clear('optimized-prompt');
+            document.getElementById('score-display').classList.add('hidden');
+            showToast('تم مسح النتيجة');
+        }
+
+        function clearAnalyzerInput() {
+            document.getElementById('analyzer-input').value = '';
+            storage.clear('analyzer-input');
+            showToast('تم مسح النص');
+        }
+
+        function clearACDQFOutput() {
+            document.getElementById('acdqf-output').value = '';
+            storage.clear('acdqf-output');
+            showToast('تم مسح النتيجة');
+        }
+
+        function clearACDQF() {
+            document.getElementById('acdqf-a').value = '';
+            document.getElementById('acdqf-c').value = '';
+            document.getElementById('acdqf-d').value = '';
+            document.getElementById('acdqf-q').value = '';
+            document.getElementById('acdqf-f').value = '';
+            document.getElementById('acdqf-output').value = '';
+            storage.clear('acdqf-output');
+            showToast('تم مسح جميع الحقول');
+        }
+
         // === بناء نموذج ACDQF المتقدم ===
         function generateACDQF() {
             const a = document.getElementById('acdqf-a').value.trim();
@@ -1447,32 +1466,18 @@ ${analysis.needsFormatting ? '- نظّم المعلومات بشكل مهيكل 
             let prompt = `🎯 **[الإجراء - Action]**
 ${a}
 
-`;
-
-            if (c) prompt += `📝 **[السياق والخلفية - Context]**
+📝 **[السياق والخلفية - Context]**
 ${c}
 
-`;
-
-            if (d) prompt += `🧠 **[التفكير العميق - Deep Thinking]**
+🧠 **[التفكير العميق - Deep Thinking]**
 يرجى التفكير خطوة بخطوة:
 ${d}
 
-`;
-
-            if (q) prompt += `⚙️ **[القيود والممنوعات - Constraints]**
+⚙️ **[القيود والممنوعات - Constraints]**
 ${q}
 
-`;
-
-            if (f) prompt += `📋 **[صيغة المخرجات - Format]**
+📋 **[صيغة المخرجات - Format]**
 ${f}`;
-
-            // إضافة ملاحظة إذا كان الأمر ناقصاً
-            const completeness = [a, c, d, q, f].filter(x => x).length;
-            if (completeness < 3) {
-                prompt += `\n\n⚠️ ملاحظة: الأمر قد يكون ناقصاً. جرب ملء المزيد من الحقول للحصول على نتيجة أفضل.`;
-            }
 
             outputArea.value = prompt;
             storage.save('acdqf-output', prompt);
