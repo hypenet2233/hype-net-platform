@@ -686,6 +686,74 @@
             color: #7dd3fc;
         }
 
+        /* === حقول إدخال عصرية موحّدة === */
+        .field {
+            width: 100%;
+            background: rgba(2, 6, 23, 0.55);
+            border: 1px solid rgba(59, 130, 246, 0.22);
+            border-radius: 10px;
+            color: #e2e8f0;
+            padding: 10px 14px;
+            font-size: 14px;
+            transition: border-color 0.25s ease, box-shadow 0.25s ease, background 0.25s ease;
+        }
+
+        .field::placeholder { color: #64748b; }
+
+        .field:focus {
+            outline: none;
+            border-color: rgba(59, 130, 246, 0.6);
+            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.18);
+            background: rgba(2, 6, 23, 0.8);
+        }
+
+        .field:hover:not(:focus) {
+            border-color: rgba(59, 130, 246, 0.4);
+        }
+
+        /* === بطاقات النتائج === */
+        .result-card {
+            background: linear-gradient(135deg, rgba(59, 130, 246, 0.06), rgba(139, 92, 246, 0.04));
+            border: 1px solid rgba(59, 130, 246, 0.18);
+            border-radius: 14px;
+            padding: 16px;
+            transition: border-color 0.25s ease, transform 0.25s ease;
+        }
+
+        .result-card:hover {
+            border-color: rgba(59, 130, 246, 0.35);
+            transform: translateY(-2px);
+        }
+
+        /* شريط الثقة */
+        .confidence-track {
+            height: 8px;
+            border-radius: 9999px;
+            background: rgba(148, 163, 184, 0.15);
+            overflow: hidden;
+        }
+
+        .confidence-fill {
+            height: 100%;
+            border-radius: 9999px;
+            background: linear-gradient(90deg, #3b82f6, #22d3ee);
+            width: 0%;
+            transition: width 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        /* تلميح اختصار لوحة المفاتيح */
+        kbd {
+            display: inline-block;
+            padding: 2px 7px;
+            font-size: 11px;
+            font-family: ui-monospace, monospace;
+            color: #93c5fd;
+            background: rgba(59, 130, 246, 0.12);
+            border: 1px solid rgba(59, 130, 246, 0.3);
+            border-radius: 6px;
+            line-height: 1.4;
+        }
+
         @media (max-width: 768px) {
             .feature-button {
                 padding: 12px 16px;
@@ -877,12 +945,15 @@
                         </div>
                         
                         <!-- Action Bar -->
-                        <div class="flex justify-center py-2">
+                        <div class="flex flex-col items-center gap-2 py-2">
                             <button onclick="processOptimization()" class="premium-btn flex items-center gap-2">
                                 <i class="ph ph-lightning text-xl"></i>
                                 <span>تحسين سحري</span>
                                 <div id="optimizer-loader" class="loader"></div>
                             </button>
+                            <p class="text-xs text-gray-500 flex items-center gap-1.5">
+                                أو اضغط <kbd>Ctrl</kbd> + <kbd>Enter</kbd>
+                            </p>
                         </div>
 
                         <!-- Output Box - توسيع -->
@@ -931,7 +1002,7 @@
                                 <i class="ph ph-trash text-sm"></i>
                             </button>
                         </div>
-                        <textarea id="analyzer-input" class="w-full h-28 bg-gray-900 border border-gray-700 rounded-lg p-4 text-gray-100 focus:outline-none focus:border-blue-500 transition-all" placeholder="أدخل النص لتحليله..."></textarea>
+                        <textarea id="analyzer-input" class="field h-28 resize-none" placeholder="أدخل النص لتحليله..."></textarea>
                     </div>
 
                     <button onclick="analyzePattern()" class="secondary-btn flex items-center gap-2 mb-6">
@@ -943,17 +1014,27 @@
                         <h3 class="text-lg font-semibold text-blue-400 border-b border-gray-800 pb-2">نتائج التحليل</h3>
                         
                         <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                            <div class="bg-gray-900/50 p-4 rounded-lg border border-gray-800">
+                            <div class="result-card">
                                 <span class="text-gray-400 text-xs block mb-1">النية الرئيسية (Intent)</span>
                                 <div id="analysis-intent" class="text-xl font-bold text-white">--</div>
                             </div>
-                            <div class="bg-gray-900/50 p-4 rounded-lg border border-gray-800">
+                            <div class="result-card">
                                 <span class="text-gray-400 text-xs block mb-1">درجة التعقيد (Complexity)</span>
                                 <div id="analysis-complexity" class="text-xl font-bold text-white">--</div>
                             </div>
                         </div>
 
-                        <div class="bg-gray-900/50 p-4 rounded-lg border border-gray-800">
+                        <div class="result-card">
+                            <div class="flex justify-between items-center mb-2">
+                                <span class="text-gray-400 text-xs">مستوى الثقة (Confidence)</span>
+                                <span id="analysis-confidence-val" class="text-sm font-bold text-cyan-400">--</span>
+                            </div>
+                            <div class="confidence-track">
+                                <div id="analysis-confidence-bar" class="confidence-fill"></div>
+                            </div>
+                        </div>
+
+                        <div class="result-card">
                             <span class="text-gray-400 text-xs block mb-2">العناصر المفقودة (Missing Elements)</span>
                             <ul id="analysis-missing" class="list-disc list-inside text-red-400 text-sm space-y-1">
                                 <!-- سيتم ملؤها برمجياً -->
@@ -982,23 +1063,23 @@
                         <div class="space-y-4">
                             <div>
                                 <label class="text-xs font-bold text-blue-400">A - الإجراء (Action)</label>
-                                <input type="text" id="acdqf-a" class="w-full bg-gray-900 border border-gray-700 rounded p-2 mt-1 text-sm text-white" placeholder="ما الذي تريده بالضبط؟ (مثال: اكتب مقال)">
+                                <input type="text" id="acdqf-a" class="field mt-1" placeholder="ما الذي تريده بالضبط؟ (مثال: اكتب مقال)">
                             </div>
                             <div>
                                 <label class="text-xs font-bold text-green-400">C - السياق (Context)</label>
-                                <textarea id="acdqf-c" class="w-full bg-gray-900 border border-gray-700 rounded p-2 mt-1 text-sm text-white h-20 resize-none" placeholder="الخلفية، الجمهور المستهدف، الهدف..."></textarea>
+                                <textarea id="acdqf-c" class="field mt-1 h-20 resize-none" placeholder="الخلفية، الجمهور المستهدف، الهدف..."></textarea>
                             </div>
                             <div>
                                 <label class="text-xs font-bold text-purple-400">D - التفكير العميق (Deep Thinking)</label>
-                                <textarea id="acdqf-d" class="w-full bg-gray-900 border border-gray-700 rounded p-2 mt-1 text-sm text-white h-20 resize-none" placeholder="خطوات التفكير أو التحليل المطلوبة من النموذج..."></textarea>
+                                <textarea id="acdqf-d" class="field mt-1 h-20 resize-none" placeholder="خطوات التفكير أو التحليل المطلوبة من النموذج..."></textarea>
                             </div>
                             <div>
                                 <label class="text-xs font-bold text-yellow-400">Q - قيود/أسئلة (Questions/Constraints)</label>
-                                <input type="text" id="acdqf-q" class="w-full bg-gray-900 border border-gray-700 rounded p-2 mt-1 text-sm text-white" placeholder="ما هي الممنوعات أو القيود؟">
+                                <input type="text" id="acdqf-q" class="field mt-1" placeholder="ما هي الممنوعات أو القيود؟">
                             </div>
                             <div>
                                 <label class="text-xs font-bold text-pink-400">F - الصيغة (Format)</label>
-                                <input type="text" id="acdqf-f" class="w-full bg-gray-900 border border-gray-700 rounded p-2 mt-1 text-sm text-white" placeholder="كيف تريد شكل المخرجات؟ (جدول، نقاط، كود...)">
+                                <input type="text" id="acdqf-f" class="field mt-1" placeholder="كيف تريد شكل المخرجات؟ (جدول، نقاط، كود...)">
                             </div>
                             <button onclick="generateACDQF()" class="w-full premium-btn mt-4">
                                 توليد الأمر المدمج
@@ -1018,7 +1099,7 @@
                                     </button>
                                 </div>
                             </div>
-                            <textarea id="acdqf-output" class="w-full flex-grow bg-gray-900 border border-gray-700 rounded-lg p-4 text-gray-100 focus:outline-none resize-none font-mono text-sm leading-relaxed" readonly placeholder="سيظهر الأمر المهيكل هنا..."></textarea>
+                            <textarea id="acdqf-output" class="field flex-grow resize-none font-mono text-sm leading-relaxed" readonly placeholder="سيظهر الأمر المهيكل هنا..."></textarea>
                         </div>
                     </div>
                 </div>
@@ -1163,6 +1244,17 @@
 
             const savedTab = storage.load('active-tab') || 'optimizer';
             switchTab(savedTab);
+
+            // اختصار Ctrl+Enter لتشغيل التحسين من حقل الإدخال
+            const rawPromptEl = document.getElementById('raw-prompt');
+            if (rawPromptEl) {
+                rawPromptEl.addEventListener('keydown', (e) => {
+                    if ((e.ctrlKey || e.metaKey) && e.key === 'Enter') {
+                        e.preventDefault();
+                        processOptimization();
+                    }
+                });
+            }
         });
 
         // === واجهة المستخدم: النسخ للحافظة ===
@@ -1371,7 +1463,14 @@ ${analysis.needsFormatting ? '- نظّم المعلومات بشكل مهيكل 
             const analysis = internalAnalyzer(input);
 
             // عرض النية
-            intentEl.innerHTML = `${analysis.intent}<br><small class="text-gray-400">(ثقة: ${analysis.confidence}%)</small>`;
+            intentEl.innerText = analysis.intent;
+
+            // شريط الثقة التفاعلي
+            const confValEl = document.getElementById('analysis-confidence-val');
+            const confBarEl = document.getElementById('analysis-confidence-bar');
+            confValEl.innerText = `${analysis.confidence}%`;
+            confBarEl.style.width = '0%';
+            requestAnimationFrame(() => { confBarEl.style.width = `${analysis.confidence}%`; });
 
             // تلوين التعقيد
             complexityEl.innerText = analysis.complexity;
