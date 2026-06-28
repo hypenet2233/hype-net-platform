@@ -1470,7 +1470,7 @@ ${analysis.needsFormatting ? '- نظّم المعلومات بشكل مهيكل 
             const confBarEl = document.getElementById('analysis-confidence-bar');
             confValEl.innerText = `${analysis.confidence}%`;
             confBarEl.style.width = '0%';
-            requestAnimationFrame(() => { confBarEl.style.width = `${analysis.confidence}%`; });
+            setTimeout(() => { confBarEl.style.width = `${analysis.confidence}%`; }, 50);
 
             // تلوين التعقيد
             complexityEl.innerText = analysis.complexity;
